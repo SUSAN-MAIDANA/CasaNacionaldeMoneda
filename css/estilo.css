@@ -1,0 +1,122 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* FONDO DE VIDEO */
+#videoFondo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* BARRA DE MENÚ SÓLIDA */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(74, 93, 90, 0.6); /* Cambiado a #4A5D5A */
+    z-index: 100;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.3);
+}
+
+.header-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* LOGO */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo img {
+    height: 45px;
+    width: auto;
+}
+
+.logo span {
+    color: #fff; /* Cambiado a blanco */
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* NAVEGACIÓN */
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 45px;
+}
+
+nav a {
+    color: #fff; /* Cambiado a blanco */
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    transition: all 0.3s ease;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+/* Línea animada al hacer hover */
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #D4AF37; /* Cambiado a dorado */
+    transition: width 0.3s ease;
+}
+
+nav a:hover {
+    color: #D4AF37; /* Cambiado a dorado */
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+/* CONTENIDO PRINCIPAL */
+main {
+    padding-top: 120px;
+    color: white;
+    text-align: center;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .header-container {
+        padding: 15px 30px;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    nav ul {
+        gap: 25px;
+    }
+    
+    nav a {
+        font-size: 12px;
+        letter-spacing: 1.2px;
+    }
+}

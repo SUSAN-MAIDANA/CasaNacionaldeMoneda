@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelo 3D - Casa de la Moneda</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{background:#566765;overflow:hidden;font-family:'Montserrat',sans-serif;}
+        
+        #canvas3d{width:100%;height:100vh;display:block;}
+        
+        .top-bar{
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            padding:20px;
+            background:linear-gradient(180deg,rgba(0,0,0,0.7) 0%,transparent 100%);
+            color:white;
+            z-index:10;
+        }
+        
+        .top-bar h1{font-size:24px;margin-bottom:5px;}
+        .top-bar a{color:#CBC1BD;text-decoration:none;font-size:14px;}
+        .top-bar a:hover{color:white;}
+        
+        .controls-hint{
+            position:absolute;
+            bottom:20px;
+            left:50%;
+            transform:translateX(-50%);
+            background:rgba(0,0,0,0.6);
+            color:white;
+            padding:12px 25px;
+            border-radius:30px;
+            font-size:14px;
+            pointer-events:none;
+        }
+
+        .light-menu{
+            position:absolute;
+            top:100px;
+            right:20px;
+            background:rgba(0,0,0,0.7);
+            padding:15px;
+            border-radius:10px;
+            border:1px solid #D4AF37;
+            z-index:10;
+        }
+
+        .light-menu button{
+            display:block;width:100%;margin:5px 0;padding:8px 15px;
+            background:#4A5D5A;color:white;border:1px solid #D4AF37;
+            border-radius:5px;cursor:pointer;font-size:13px;transition:all 0.3s;
+        }
+
+        .light-menu button:hover{background:#D4AF37;color:#1a1a1a;}
+        .light-menu button.active{background:#D4AF37;color:#1a1a1a;}
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <h1>Casa Nacional de la Moneda - Modelo 3D</h1>
+        <a href="infraestructura.html">← Volver a Infraestructura</a>
+    </div>
+    
+    <canvas id="canvas3d"></canvas>
+    
+    <div class="controls-hint">
+        Arrastra para rotar • Scroll para zoom • Clic derecho para mover
+    </div>
+
+    <div class="light-menu">
+        <button id="btn-dia" class="active">Día</button>
+        <button id="btn-noche"> Noche</button>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x566765); // Tu color original
+
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1000);
+        camera.position.set(3,2,4);
+
+        const renderer = new THREE.WebGLRenderer({
+            canvas: document.getElementById('canvas3d'),
+            antialias:true
+        });
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff,0.7);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff,1);
+        directionalLight.position.set(5,10,5);
+        scene.add(directionalLight);
+
+        const controls = new OrbitControls(camera,renderer.domElement);
+        controls.enableDamping=true;
+        controls.dampingFactor=0.05;
+        controls.autoRotate=false;
+
+        const loader = new GLTFLoader();
+        loader.load('casamoneda.glb',function(gltf){
+            const model=gltf.scene;
+            model.scale.set(2.5,2.5,2.5);
+            scene.add(model);
+        });
+
+        function animate(){
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene,camera);
+        }
+        animate();
+
+        window.addEventListener('resize',()=>{
+            camera.aspect=window.innerWidth/window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth,window.innerHeight);
+        });
+
+        const btnDia = document.getElementById('btn-dia');
+        const btnNoche = document.getElementById('btn-noche');
+
+        btnDia.onclick = () => {
+            scene.background.setHex(0x566765); // Día: tu color original
+            ambientLight.intensity = 0.7;
+            ambientLight.color.setHex(0xffffff);
+            directionalLight.intensity = 1;
+            directionalLight.color.setHex(0xffffff);
+            setActive(btnDia);
+        }
+
+        btnNoche.onclick = () => {
+            scene.background.setHex(0x2a2a2a); // Noche: gris oscuro
+            ambientLight.intensity = 0.2;
+            ambientLight.color.setHex(0x7a7a7a);
+            directionalLight.intensity = 0.4;
+            directionalLight.color.setHex(0xa0a0a0);
+            setActive(btnNoche);
+        }
+
+        function setActive(btn){
+            document.querySelectorAll('.light-menu button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+    </script>
+</body>
+</html>

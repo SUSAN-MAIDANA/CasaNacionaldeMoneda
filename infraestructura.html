@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infraestructura - Casa de la Moneda</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* NAVBAR */
+        nav {
+            background: #4A5D5A;
+            padding: 0 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+     .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+     .nav-logo img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+        }
+
+     .nav-logo span {
+            color: #fff;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+
+     .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+     .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            padding-bottom: 5px;
+        }
+
+     .nav-menu a:hover,
+     .nav-menu a.active {
+            color: #D4AF37;
+        }
+
+     .nav-menu a.active {
+            border-bottom: 2px solid #D4AF37;
+        }
+
+     .main-content {
+            padding-bottom: 80px;
+        }
+
+     .intro {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            padding: 60px 40px 0;
+            text-align: center;
+        }
+
+     .intro h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #D4AF37;
+        }
+
+     .intro p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #ccc;
+        }
+
+        /* DESCRIPCIÓN ANTES DEL 3D */
+     .descripcion-edificio {
+            max-width: 1000px;
+            margin: 0 auto 60px;
+            padding: 0 40px;
+        }
+
+     .descripcion-edificio p {
+            font-size: 17px;
+            line-height: 1.9;
+            color: #ccc;
+            margin-bottom: 18px;
+            text-align: justify;
+        }
+
+     .descripcion-edificio strong {
+            color: #D4AF37;
+        }
+
+        /* CANVAS 3D */
+     .canvas-full {
+            width: 100%;
+            height: 600px;
+            position: relative;
+            background: #4A5D5A;
+            margin-bottom: 80px;
+            border-top: 2px solid #D4AF37;
+            border-bottom: 2px solid #D4AF37;
+        }
+
+        #canvas3d {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+     .btn-360 {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 30px;
+            background: #4A5D5A;
+            color: #fff;
+            border: 2px solid #D4AF37;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+        }
+
+     .btn-360:hover {
+            background: #D4AF37;
+            color: #1a1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        /* GRID DE CARDS */
+     .section-title {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 0 40px;
+        }
+
+     .section-title h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 36px;
+            color: #D4AF37;
+            text-align: center;
+        }
+
+     .spaces-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+            justify-items: center;
+        }
+
+     .space-card {
+            background: #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            border: 1px solid #4A5D5A;
+            width: 100%;
+            max-width: 380px;
+        }
+
+     .space-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(74, 93, 90, 0.4);
+            border-color: #D4AF37;
+        }
+
+     .space-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+     .space-card:hover img {
+            transform: scale(1.05);
+        }
+
+     .space-card.info {
+            padding: 25px 20px;
+        }
+
+     .space-card h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 22px;
+            color: #D4AF37;
+            margin-bottom: 12px;
+        }
+
+     .space-card p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        /* MODAL LIGHTBOX */
+     .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+     .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+     .modal-content {
+            background: rgba(6, 7, 6, 0.16);
+            max-width: 600px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 16px;
+            position: relative;
+            animation: zoomIn 0.3s ease;
+            border: 2px solid #D4AF37;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.85);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+     .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 28px;
+            color: #fff;
+            cursor: pointer;
+            z-index: 10;
+            background: rgba(212, 175, 55, 0.9);
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            line-height: 1;
+            transition: 0.3s;
+        }
+
+     .modal-close:hover {
+            background: #D4AF37;
+            transform: rotate(90deg);
+        }
+
+     .modal-img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 14px 14px 0 0;
+        }
+
+     .modal-body {
+            padding: 30px;
+        }
+
+     .modal-body h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 26px;
+            color: #D4AF37;
+            margin-bottom: 15px;
+        }
+
+     .modal-body h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            color: #D4AF37;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+     .modal-body p {
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 12px;
+            color: #ccc;
+        }
+
+      .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+      .modal-content::-webkit-scrollbar-track {
+            background: #2a2a2a;
+            border-radius: 10px;
+        }
+      .modal-content::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 10px;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            background: #4A5D5A;
+            color: #fff;
+        }
+
+        @media (max-width: 900px) {
+            nav {
+                padding: 0 20px;
+                flex-direction: column;
+                height: auto;
+                padding: 15px;
+            }
+         .nav-menu {
+                gap: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 10px;
+            }
+         .intro h1 {
+                font-size: 36px;
+            }
+         .section-title h2 {
+                font-size: 28px;
+            }
+         .canvas-full {
+                height: 400px;
+            }
+         .spaces-grid {
+                padding: 0 25px;
+            }
+         .modal-body {
+                padding: 25px;
+            }
+         .modal-img {
+                height: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-logo">
+            <img src="img/cara.png" alt="Casa de la Moneda">
+            <span>CASA NACIONAL DE MONEDA</span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html">INICIO</a></li>
+            <li><a href="historia.html">HISTORIA</a></li>
+            <li><a href="infraestructura.html" class="active">INFRAESTRUCTURA</a></li>
+            <li><a href="monedas.html">MONEDAS</a></li>
+            <li><a href="informacion.html">INFORMACIÓN</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <div class="intro">
+            <h1>Infraestructura</h1>
+            <p>
+                Fortaleza de piedra de 14 años de construcción. Muros de 1 metro, 5 patios y 200 habitaciones diseñadas para resistir revueltas.
+            </p>
+        </div>
+
+        <div class="canvas-full">
+            <canvas id="canvas3d"></canvas>
+            <a href="modelo3d.html" class="btn-360">Ver en 360°</a>
+        </div>
+
+        <div class="descripcion-edificio">
+            <p>
+                La <strong>Casa Nacional de la Moneda</strong> es un coloso de piedra que domina el centro histórico de Potosí. Construida entre 1759 y 1773, tardó 14 años en levantarse y ocupa dos hectáreas completas. Su costo fue tan descomunal que el rey Carlos III de España bromeó diciendo que sus muros debían estar hechos de pura plata.
+            </p>
+            <p>
+                Diseñada como una fortaleza militar, cuenta con muros de piedra de más de un metro de espesor, cinco patios majestuosos y cerca de 200 habitaciones. Las gigantescas vigas de madera que sostienen sus techos fueron traídas a lomo de mula desde los bosques del norte argentino y los valles del sur boliviano, cruzando la cordillera en un viaje mortal para hombres y animales.
+            </p>
+            <p>
+                Hoy es el museo más importante de Bolivia y la obra civil colonial más grande de América. Cada rincón cuenta la historia de la plata que financió un imperio y del sudor de miles de trabajadores que la hicieron posible.
+            </p>
+        </div>
+
+        <div class="section-title">
+            <h2>Espacios más Importantes</h2>
+        </div>
+
+        <div class="spaces-grid">
+            <!-- 1. Patio Principal -->
+            <div class="space-card" onclick="openModal(0)">
+                <img src="img/patio-principal.jpg" alt="Patio Principal">
+                <div class="info">
+                    <h3>Patio Principal</h3>
+                    <p>Centro administrativo colonial. Controlaba el flujo de plata que financiaba guerras en Europa.</p>
+                </div>
+            </div>
+
+            <!-- 2. Salón de Monedas -->
+            <div class="space-card" onclick="openModal(1)">
+                <img src="img/sala-monedas.jpg" alt="Salón de Monedas">
+                <div class="info">
+                    <h3>Salón de Monedas</h3>
+                    <p>Exhibe la evolución monetaria de Bolivia. Monedas, billetes y lingotes de 400 años de historia.</p>
+                </div>
+            </div>
+
+            <!-- 3. Sala de Acuñación -->
+            <div class="space-card" onclick="openModal(2)">
+                <img src="img/acuñacion.jpg" alt="Sala de Acuñación">
+                <div class="info">
+                    <h3>Sala de Acuñación</h3>
+                    <p>Corazón de la producción. Rodillos españoles y maquinaria para acuñar moneda de plata.</p>
+                </div>
+            </div>
+
+            <!-- 4. Hornos de Fundición -->
+            <div class="space-card" onclick="openModal(3)">
+                <img src="img/hornos.jpg" alt="Hornos de Fundición">
+                <div class="info">
+                    <h3>Hornos de Fundición</h3>
+                    <p>Infierno de plata y cobre fundido. Chimeneas gigantes evacuaban gases letales día y noche.</p>
+                </div>
+            </div>
+
+            <!-- 5. Pinacoteca -->
+            <div class="space-card" onclick="openModal(4)">
+                <img src="img/pinacoteca.jpg" alt="Pinacoteca">
+                <div class="info">
+                    <h3>Pinacoteca</h3>
+                    <p>Lienzos de Melchor Pérez de Holguín. Destaca la Virgen del Cerro fusionada con el Cerro Rico.</p>
+                </div>
+            </div>
+
+            <!-- 6. Reloj de Sol Colonial -->
+            <div class="space-card" onclick="openModal(5)">
+                <img src="img/reloj-sol.jpg" alt="Reloj de Sol">
+                <div class="info">
+                    <h3>Reloj de Sol Colonial</h3>
+                    <p>Pilar de piedra con cálculo astronómico. Medía el tiempo exacto incluso en invierno potosino.</p>
+                </div>
+            </div>
+
+            <!-- 7. Acuñación Manual -->
+            <div class="space-card" onclick="openModal(6)">
+                <img src="img/manual.jpg" alt="Acuñación Manual">
+                <div class="info">
+                    <h3>Acuñación Manual</h3>
+                    <p>Máquina de palanca operada por dos hombres. Sistema de emergencia usado en tiempos de crisis.</p>
+                </div>
+            </div>
+
+            <!-- 8. Evolución Industrial -->
+            <div class="space-card" onclick="openModal(7)">
+                <img src="img/maquinas.jpg" alt="Evolución Industrial">
+                <div class="info">
+                    <h3>Evolución Industrial</h3>
+                    <p>Máquinas a vapor de 1869 y motores eléctricos. La modernización de la ceca republicana.</p>
+                </div>
+            </div>
+
+            <!-- 9. Capilla Interior -->
+            <div class="space-card" onclick="openModal(8)">
+                <img src="img/iglesia.jpg" alt="Capilla Interior">
+                <div class="info">
+                    <h3>Capilla Interior</h3>
+                    <p>Templo de San Antonio de Padua. Refugio espiritual para pedir bendición a la producción minera.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Casa Nacional de Moneda | Potosí | Bolivia</p>
+        
+    </footer>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <img class="modal-img" id="modalImg" src="" alt="">
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x4A5D5A);
+
+        const canvas = document.getElementById('canvas3d');
+        const camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+        camera.position.set(2, 1.5, 2.5);
+
+        const renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true});
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 10, 5);
+        scene.add(directionalLight);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+
+        let model;
+        const loader = new GLTFLoader();
+        loader.load('casamoneda.glb',
+            function(gltf){
+                model = gltf.scene;
+                model.scale.set(2.5, 2.5, 2.5);
+                scene.add(model);
+            }
+        );
+
+        function animate(){
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = canvas.clientWidth / canvas.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        });
+    </script>
+
+    <script>
+        // DATOS DEL MODAL
+        const modalData = [
+            {
+                img: "img/patio-principal.jpg",
+                title: "Patio Principal",
+                content: `
+                    <h3>Infraestructura</h3>
+                    <p>Patio central de estilo colonial puro, rodeado de arcos de piedra tallada y columnas de granito. Era el corazón administrativo del edificio.</p>
+                    <h3>Función Administrativa</h3>
+                    <p>Se registraban las entradas y salidas de plata, se realizaban ceremonias oficiales y se controlaba el acceso al resto del complejo. Desde aquí salían las caravanas con moneda hacia el puerto de Arica.</p>
+                `
+            },
+            {
+                img: "img/sala-monedas.jpg",
+                title: "Salón de Monedas",
+                content: `
+                    <h3>Infraestructura</h3>
+                    <p>Sala amplia con vitrinas de madera y cristal, diseñada para exhibir piezas históricas en condiciones de conservación óptimas.</p>
+                    <h3>Colección Histórica</h3>
+                    <p>Se exhiben monedas, billetes, lingotes y documentos que narran 400 años de historia monetaria boliviana. Es el recorrido cronológico desde la colonia hasta la república.</p>
+                `
+            },
+            {
+                img: "img/acuñacion.jpg",
+                title: "Sala de Acuñación",
+                content: `
+                    <h3>Infraestructura</h3>
+                    <p>Sala con pisos de madera reforzada para soportar el peso de las prensas. Conserva los rodillos originales traídos de España en el siglo XVIII.</p>
+                    <h3>Proceso de Acuñación</h3>
+                    <p>Se aplanaban los discos de plata y se estampaban con los cuños reales. El proceso requería precisión milimétrica para evitar fraudes y garantizar el peso exacto de cada moneda.</p>
+                `
+            },
+            {
+                img: "img/hornos.jpg",
+                title: "Hornos de Fundición",
+                content: `
+                    <h3>Infraestructura</h3>
+                    <p>Zona de trabajo pesado con chimeneas de 15 metros de altura diseñadas para evacuar gases tóxicos hacia el exterior.</p>
+                    <h3>Proceso de Fundición</h3>
+                    <p>Se fundía la plata cruda extraída del Cerro Rico y se mezclaba con cobre en hornos a más de 1000°C. El ambiente era sofocante y los gases de plomo y mercurio reducían la esperanza de vida de los operarios a pocos años.</p>
+                `
+            },
+            {
+                img: "img/pinacoteca.jpg",
+                title: "Pinacoteca",
+                content: `
+                    <h3>Infraestructura</h3>
+                    <p>Sala de techos altos con iluminación natural, ubicada en el segundo nivel del edificio colonial.</p>
+                    <h3>Arte Colonial</h3>
+                    <p>Se conservan y exhiben pinturas coloniales de maestros potosinos. La pieza central es la Virgen del Cerro, donde el cuerpo de la Virgen María se fusiona visualmente con la silueta del Cerro Rico.</p>
+                `
+            },
+            {
+                img: "img/reloj-sol.jpg",
+                title: "Reloj de Sol Colonial",
+                content: `
+                    <h3>Infraestructura</h3>
+                    <p>Pilar de piedra tallada ubicado en el segundo patio, con dos caras marcadas con precisión astronómica.</p>
+                    <h3>Medición del Tiempo</h3>
+                    <p>Se medía el tiempo exacto para organizar los turnos de trabajo en la ceca. Durante el invierno potosino, cuando el sol era bajo, se usaba la cara trasera del reloj que marcaba los minutos con exactitud absoluta.</p>
+                `
+            },
+            {
+                img: "img/manual.jpg",
+                title: "Acuñación Manual",
+                content: `
+                    <h3>Infraestructura</h3>
+                    <p>Máquina de palanca de hierro forjado, diseñada para ser operada por dos personas de forma manual.</p>
+                    <h3>Sistema de Emergencia</h3>
+                    <p>Se usaba como sistema de emergencia cuando fallaban las máquinas principales. Dos operarios aplicaban fuerza sobre la palanca para golpear el cuño contra el disco de metal. Era lento pero garantizaba la producción en tiempos de crisis.</p>
+                `
+            },
+            {
+                img: "img/maquinas.jpg",
+                title: "Evolución Industrial",
+                content: `
+                    <h3>Infraestructura</h3>
+                    <p>Sector industrial con calderas, prensas mecánicas y motores eléctricos instalados entre 1869 y el siglo XX.</p>
+                    <h3>Modernización Tecnológica</h3>
+                    <p>Se modernizó el proceso de acuñación con tecnología de vapor y electricidad. Las nuevas prensas automatizaron la emisión de moneda republicana, aumentando la producción y reduciendo el esfuerzo físico.</p>
+                `
+            },
+            {
+                img: "img/iglesia.jpg",
+                title: "Capilla Interior",
+                content: `
+                    <h3>Infraestructura</h3>
+                    <p>Templo interno dedicado a San Antonio de Padua, con altar de madera tallada y pinturas religiosas coloniales.</p>
+                    <h3>Vida Espiritual</h3>
+                    <p>Los funcionarios, ensayadores y obreros acudían diariamente a misa. Era el refugio espiritual del complejo, donde se pedía por el éxito y la bendición divina de la producción minera.</p>
+                `
+            }
+        ];
+
+        function openModal(index) {
+            const data = modalData[index];
+            document.getElementById('modalImg').src = data.img;
+            document.getElementById('modalBody').innerHTML = `<h2>${data.title}</h2>${data.content}`;
+            document.getElementById('modalOverlay').classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if(e.target === this) closeModal();
+        });
+    </script>
+</body>
+</html>

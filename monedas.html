@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monedas de Potosí - Casa de la Moneda</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        body.modal-open { overflow: hidden; }
+
+        /* NAVBAR - tu CSS igual */
+        nav {
+            background: #4A5D5A;
+            padding: 0 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+       .nav-logo { display: flex; align-items: center; gap: 15px; }
+       .nav-logo img { width: 45px; height: 45px; border-radius: 50%; }
+       .nav-logo span { color: #fff; font-weight: 700; font-size: 18px; letter-spacing: 1px; }
+
+       .nav-menu { display: flex; list-style: none; gap: 40px; }
+       .nav-menu a {
+            color: #fff; text-decoration: none; font-weight: 500; font-size: 15px;
+            letter-spacing: 1px; transition: all 0.3s; padding-bottom: 5px;
+        }
+       .nav-menu a:hover,.nav-menu a.active { color: #D4AF37; }
+       .nav-menu a.active { border-bottom: 2px solid #D4AF37; }
+
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: linear-gradient(180deg, #4A5D5A 0%, #1a1a1a 100%);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 48px;
+            color: #D4AF37;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+
+       .subtitle { font-size: 18px; color: #ccc; font-weight: 300; }
+       .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+       .model-section {
+            background: rgba(74, 93, 90, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 60px;
+            border: 2px solid #4A5D5A;
+            box-shadow: 0 10px 40px rgba(74, 93, 90, 0.3);
+        }
+
+       .model-section h2 {
+            font-family: 'Cinzel', serif;
+            color: #D4AF37;
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+       .model-container {
+            width: 100%;
+            height: 500px;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            background-color: #4A5D5A;
+        }
+
+       .model-info {
+            text-align: center;
+            margin-top: 20px;
+            color: #ccc;
+            font-size: 15px;
+        }
+
+        /* Resto de tu CSS igual... */
+       .proceso-texto { max-width: 900px; margin: 40px auto; padding: 0 20px; text-align: justify; }
+       .proceso-texto p { font-size: 16px; line-height: 1.9; color: #ccc; margin-bottom: 18px; }
+       .proceso-texto ol { margin: 20px 0 20px 30px; color: #ccc; }
+       .proceso-texto ol li { font-size: 16px; line-height: 1.9; margin-bottom: 12px; }
+       .proceso-texto strong { color: #fff; font-weight: 600; }
+
+       .coins-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px; margin-top: 40px;
+        }
+       .coin-card {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            border-radius: 15px; overflow: hidden; border: 1px solid #4A5D5A;
+            transition: transform 0.3s, box-shadow 0.3s; cursor: pointer;
+        }
+       .coin-card:hover {
+            transform: translateY(-10px); box-shadow: 0 15px 30px rgba(74, 93, 90, 0.4);
+            border-color: #D4AF37;
+        }
+       .coin-image { width: 100%; height: 250px; object-fit: cover; background: #4A5D5A; }
+       .coin-info { padding: 20px; }
+       .coin-info h3 { font-family: 'Cinzel', serif; color: #D4AF37; font-size: 22px; margin-bottom: 10px; }
+       .coin-info p { color: #ccc; font-size: 14px; line-height: 1.6; }
+       .coin-tag {
+            display: inline-block; background: #4A5D5A; color: #fff; padding: 5px 12px;
+            border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: 10px;
+            border: 1px solid #D4AF37;
+        }
+
+       .info-box {
+            background: rgba(74, 93, 90, 0.15); border-left: 4px solid #D4AF37;
+            padding: 20px; margin: 40px 0; border-radius: 8px;
+        }
+       .info-box h3 { color: #D4AF37; margin-bottom: 10px; font-family: 'Cinzel', serif; }
+
+        footer {
+            text-align: center; padding: 40px 20px; margin-top: 60px;
+            background: #4A5D5A; color: #fff; border-top: 3px solid #D4AF37;
+        }
+        footer p { font-size: 14px; color: #ccc; margin: 5px 0; }
+        footer p:first-child { color: #D4AF37; font-weight: 600; font-size: 15px; }
+
+       .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+            opacity: 0; visibility: hidden; transition: all 0.3s ease;
+            z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px;
+        }
+       .modal-overlay.active { opacity: 1; visibility: visible; }
+       .modal-content {
+            background: #1a1a1a; max-width: 650px; width: 90%; max-height: 85vh;
+            overflow-y: auto; border-radius: 16px; position: relative;
+            animation: zoomIn 0.3s ease; border: 2px solid #D4AF37;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.85); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+       .modal-close {
+            position: absolute; top: 12px; right: 12px; font-size: 28px; color: #fff;
+            cursor: pointer; z-index: 10; background: rgba(212, 175, 55, 0.9);
+            width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; line-height: 1; transition: 0.3s;
+        }
+       .modal-close:hover { background: #D4AF37; transform: rotate(90deg); }
+       .modal-img { width: 100%; height: 280px; object-fit: cover; border-radius: 14px 14px 0 0; }
+       .modal-body { padding: 30px; }
+       .modal-body h2 { font-family: 'Cinzel', serif; font-size: 26px; color: #D4AF37; margin-bottom: 15px; }
+       .modal-body h3 { font-family: 'Cinzel', serif; font-size: 18px; color: #D4AF37; margin-top: 20px; margin-bottom: 10px; }
+       .modal-body p { font-size: 15px; line-height: 1.8; margin-bottom: 12px; color: #ccc; }
+    </style>
+
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-logo">
+            <img src="img/cara.png" alt="Logo Casa de la Moneda">
+            <span>CASA NACIONAL DE MONEDA</span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html">INICIO</a></li>
+            <li><a href="historia.html">HISTORIA</a></li>
+            <li><a href="infraestructura.html">INFRAESTRUCTURA</a></li>
+            <li><a href="monedas.html" class="active">MONEDAS</a></li>
+            <li><a href="informacion.html">INFORMACIÓN</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Historia de las primeras monedas</h1>
+        <p class="subtitle">El legado de plata que cambió el mundo</p>
+    </header>
+
+    <div class="container">
+
+        <!-- Sección del modelo 3D CON LUCES -->
+        <div class="model-section">
+            <div class="model-container">
+                <model-viewer
+                    src="hombre.glb"
+                    alt="Figura de hombre acuñando monedas"
+                    auto-rotate
+                    camera-controls
+                    shadow-intensity="1"
+                    exposure="1.2"
+                    environment-image="neutral"
+                    ar>
+
+                    <!-- 6.1 Luz Ambiental -->
+                    <ambient-light intensity="0.5" color="#ffffff"></ambient-light>
+
+                    <!-- 6.2 Luz Direccional -->
+                    <directional-light
+                        intensity="1"
+                        color="#ffd700"
+                        position="3 5 3">
+                    </directional-light>
+
+                </model-viewer>
+            </div>
+            <div class="model-info">
+                <h2>Acuñador</h2>
+                <p>Modelo 3D interactivo: Arrastra para rotar • Scroll para zoom • Clic derecho para mover</p>
+            </div>
+        </div>
+
+        <!-- Resto de tu código igual -->
+        <div class="proceso-texto">
+            <p>
+                En los inicios de la acuñación en América y el mundo, el proceso era completamente artesanal y dependía de la <strong>fuerza humana</strong>.
+                En la Villa Imperial de Potosí, el trabajo era realizado por <strong>indígenas</strong> bajo el sistema colonial de la <strong>mita</strong>.
+            </p>
+
+            <p>
+                Este método se conoció como <strong style="color: #D4AF37; font-size: 18px;">acuñación a martillo</strong>:
+            </p>
+
+            <ol>
+                <li>Se fundía la plata extraída del <strong>Cerro Rico</strong> y se cortaban pedazos de metal a ojo con tijeras.</li>
+                <li>El acuñador colocaba el trozo de plata caliente llamado <strong>cospe</strong> sobre un yunque que tenía grabado el diseño de una de las caras de la moneda.</li>
+                <li>Encima del metal colocaba un troquel superior <strong>cuño</strong> con el diseño de la otra cara.</li>
+                <li>Con un golpe seco y violento de martillo, la fuerza humana transfería las imágenes al metal.</li>
+            </ol>
+
+            <p>
+                Debido a la prisa, el desgaste y lo rudimentario del golpe manual, las monedas resultaban <strong>tosca</strong>, con bordes totalmente irregulares y formas únicas.
+                A este tipo de monedas artesanales hechas a golpe de mano se les llamó <strong style="color: #D4AF37; font-size: 18px;">macuquina</strong>.
+            </p>
+        </div>
+
+        <h2 style="text-align: center; font-family: 'Cinzel', serif; color: #D4AF37; font-size: 36px; margin: 60px 0 30px;">
+           Monedas Históricas Principales
+        </h2>
+
+        <div class="coins-grid">
+            <div class="coin-card" onclick="openModal(0)">
+                <img src="img/moneda1.jpg" alt="Macuquinas" class="coin-image">
+                <div class="coin-info">
+                    <h3>Las Macuquinas</h3>
+                    <p>Monedas iniciales fabricadas a golpe de martillo. Siglos XVI-XVIII.</p>
+                    <span class="coin-tag">Siglo XVI-XVIII</span>
+                </div>
+            </div>
+
+            <div class="coin-card" onclick="openModal(1)">
+                <img src="img/moneda2.jpg" alt="Real de a 8" class="coin-image">
+                <div class="coin-info">
+                    <h3>Real de a 8</h3>
+                    <p>El origen del signo del dólar. Primera divisa global.</p>
+                    <span class="coin-tag">Siglo XVI-XVII</span>
+                </div>
+            </div>
+
+            <div class="coin-card" onclick="openModal(2)">
+                <img src="img/moneda3.jpg" alt="Moneda Corazón" class="coin-image">
+                <div class="coin-info">
+                    <h3>Moneda Corazón</h3>
+                    <p>Plata cortada en forma de corazón perfecto. 1727.</p>
+                    <span class="coin-tag">1727</span>
+                </div>
+            </div>
+
+            <div class="coin-card" onclick="openModal(3)">
+                <img src="img/moneda4.jpg" alt="Busto Carlos III y IV" class="coin-image">
+                <div class="coin-info">
+                    <h3>Busto Carlos III y IV</h3>
+                    <p>Monedas con perfil de los reyes españoles. 1772-1825.</p>
+                    <span class="coin-tag">1772-1825</span>
+                </div>
+            </div>
+
+            <div class="coin-card" onclick="openModal(4)">
+                <img src="img/moneda5.jpg" alt="Provincias Unidas" class="coin-image">
+                <div class="coin-info">
+                    <h3>Provincias Unidas</h3>
+                    <p>Primeras monedas argentinas acuñadas en Potosí. 1813-1815.</p>
+                    <span class="coin-tag">1813-1815</span>
+                </div>
+            </div>
+
+            <div class="coin-card" onclick="openModal(5)">
+                <img src="img/moneda6.jpg" alt="8 Soles Bolívar" class="coin-image">
+                <div class="coin-info">
+                    <h3>8 Soles de 1827</h3>
+                    <p>Primera moneda con rostro de Simón Bolívar.</p>
+                    <span class="coin-tag">1827</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box" style="margin-top: 60px;">
+            <h3>🔍 Dato Curioso</h3>
+            <p>La frase "No vale un centavo" viene de estas monedas. El "centavo" era la moneda más pequeña y menos valiosa. Si algo "no valía un centavo", era porque ni siquiera valía la moneda más chica de Potosí.</p>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>Casa Nacional de la Moneda</p>
+        <p>Potosí | Bolivia</p>
+    </footer>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <img class="modal-img" id="modalImg" src="" alt="">
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        const modalData = [
+            { img: "img/moneda1.jpg", title: "Las Macuquinas (Siglos XVI - XVIII)", content: `<h3>Historia</h3><p>Son las monedas iniciales fabricadas a golpe de martillo...</p>` },
+            { img: "img/moneda2.jpg", title: "El Real de a 8 (El origen del signo del dólar)", content: `<h3>Historia</h3><p>Es la moneda más famosa de la historia universal...</p>` },
+            { img: "img/moneda3.jpg", title: "La Moneda con forma de Corazón (1727)", content: `<h3>Lo que verás en el museo</h3><p>Una pieza de plata cortada meticulosamente...</p>` },
+            { img: "img/moneda4.jpg", title: "La Moneda de Busto de Carlos III y Carlos IV (1772 - 1825)", content: `<h3>Lo que verás en el museo</h3><p>Monedas redondas de plata que llevan grabado el perfil...</p>` },
+            { img: "img/moneda5.jpg", title: "Las Monedas de los 'Provincias Unidas del Río de la Plata' (1813 y 1815)", content: `<h3>Lo que verás en el museo</h3><p>Monedas coloniales que en lugar del rey español...</p>` },
+            { img: "img/moneda6.jpg", title: "Los 8 Soles de 1827 (Simón Bolívar)", content: `<h3>Lo que verás en el museo</h3><p>La primera gran moneda de plata de la era republicana...</p>` }
+        ];
+
+        function openModal(index) {
+            const data = modalData[index];
+            document.getElementById('modalImg').src = data.img;
+            document.getElementById('modalBody').innerHTML = `<h2>${data.title}</h2>${data.content}`;
+            document.getElementById('modalOverlay').classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if(e.target === this) closeModal();
+        });
+    </script>
+
+</body>
+</html>
