@@ -31,7 +31,6 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            
         }
 
         .nav-logo {
@@ -143,8 +142,34 @@
         }
         
         /* MODELO 3D */
-        .canvas-container {
+        .model-wrapper {
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* NOTA DE CARGA */
+        .loading-note {
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid #D4AF37;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-size: 14px;
+            color: #D4AF37;
+            text-align: center;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .loading-note.hidden {
+            display: none;
+        }
+        
+        .canvas-container {
             position: sticky;
             top: 140px;
             height: 75vh;
@@ -174,7 +199,7 @@
             border: 1px solid #D4AF37;
         }
         
-        /* PANEL LATERAL - ARREGLADO */
+        /* PANEL LATERAL */
         .side-panel {
             position: fixed;
             left: -650px;
@@ -249,7 +274,6 @@
             color: #D4AF37;
         }
 
-        /* IMAGEN LARGA */
         .panel-img {
             width: 100%;
             height: 380px;
@@ -395,10 +419,16 @@
             </button>
         </div>
         
-        <div class="canvas-container">
-            <canvas id="canvas"></canvas>
-            <div class="info-box">
-                 Arrastra para rotar | Scroll para zoom 
+        <!-- WRAPPER DEL MODELO CON NOTA -->
+        <div class="model-wrapper">
+            <div class="loading-note" id="loadingNote">
+                ⏳ El modelo 3D puede tardar algunos segundos en cargar debido a su tamaño y calidad. Por favor, espere un momento mientras se completa la carga.
+            </div>
+            <div class="canvas-container">
+                <canvas id="canvas"></canvas>
+                <div class="info-box">
+                     Arrastra para rotar | Scroll para zoom 
+                </div>
             </div>
         </div>
     </div>
@@ -423,7 +453,6 @@
                 1856 por el francés <strong>Martín Moulon</strong>, quien trabajaba como Tallador Mayor de la ceca.
             </p>
 
-            <!-- IMAGEN LARGA -->
             <img src="img/oli.jpg" alt="Mascarón" class="panel-img">
             
             <h3>La Dualidad en Piedra</h3>
@@ -485,6 +514,8 @@
         controls.autoRotateSpeed = 1;
 
         const loader = new GLTFLoader();
+        const loadingNote = document.getElementById('loadingNote');
+
         loader.load('careta.glb', 
             function(gltf){
                 const model = gltf.scene;
@@ -494,6 +525,13 @@
                 model.position.y = 0.2;
                 model.scale.set(1.8, 1.8, 1.8);
                 scene.add(model);
+                
+                // Oculta la nota cuando carga
+                loadingNote.classList.add('hidden');
+            },
+            undefined,
+            function(error){
+                loadingNote.innerHTML = '❌ Error al cargar el modelo 3D';
             }
         );
 

@@ -37,32 +37,32 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
-     .nav-logo {
+       .nav-logo {
             display: flex;
             align-items: center;
             gap: 15px;
         }
 
-     .nav-logo img {
+       .nav-logo img {
             width: 45px;
             height: 45px;
             border-radius: 50%;
         }
 
-     .nav-logo span {
+       .nav-logo span {
             color: #fff;
             font-weight: 700;
             font-size: 18px;
             letter-spacing: 1px;
         }
 
-     .nav-menu {
+       .nav-menu {
             display: flex;
             list-style: none;
             gap: 40px;
         }
 
-     .nav-menu a {
+       .nav-menu a {
             color: #fff;
             text-decoration: none;
             font-size: 15px;
@@ -73,47 +73,47 @@
             padding-bottom: 5px;
         }
 
-     .nav-menu a:hover,
-     .nav-menu a.active {
+       .nav-menu a:hover,
+       .nav-menu a.active {
             color: #D4AF37;
         }
 
-     .nav-menu a.active {
+       .nav-menu a.active {
             border-bottom: 2px solid #D4AF37;
         }
 
-     .main-content {
+       .main-content {
             padding-bottom: 80px;
         }
 
-     .intro {
+       .intro {
             max-width: 900px;
             margin: 0 auto 40px;
             padding: 60px 40px 0;
             text-align: center;
         }
 
-     .intro h1 {
+       .intro h1 {
             font-family: 'Cinzel', serif;
             font-size: 48px;
             margin-bottom: 15px;
             color: #D4AF37;
         }
 
-     .intro p {
+       .intro p {
             font-size: 18px;
             line-height: 1.8;
             color: #ccc;
         }
 
         /* DESCRIPCIÓN ANTES DEL 3D */
-     .descripcion-edificio {
+       .descripcion-edificio {
             max-width: 1000px;
             margin: 0 auto 60px;
             padding: 0 40px;
         }
 
-     .descripcion-edificio p {
+       .descripcion-edificio p {
             font-size: 17px;
             line-height: 1.9;
             color: #ccc;
@@ -121,17 +121,41 @@
             text-align: justify;
         }
 
-     .descripcion-edificio strong {
+       .descripcion-edificio strong {
             color: #D4AF37;
         }
 
         /* CANVAS 3D */
-     .canvas-full {
+       .model-wrapper {
+            margin-bottom: 80px;
+        }
+
+       .loading-note {
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid #D4AF37;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-size: 14px;
+            color: #D4AF37;
+            text-align: center;
+            font-weight: 500;
+            max-width: 1200px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+       .loading-note.hidden {
+            display: none;
+        }
+
+       .canvas-full {
             width: 100%;
             height: 600px;
             position: relative;
             background: #4A5D5A;
-            margin-bottom: 80px;
             border-top: 2px solid #D4AF37;
             border-bottom: 2px solid #D4AF37;
         }
@@ -142,7 +166,7 @@
             display: block;
         }
 
-     .btn-360 {
+       .btn-360 {
             position: absolute;
             bottom: 30px;
             right: 30px;
@@ -161,7 +185,7 @@
             text-decoration: none;
         }
 
-     .btn-360:hover {
+       .btn-360:hover {
             background: #D4AF37;
             color: #1a1a1a;
             transform: translateY(-2px);
@@ -169,20 +193,20 @@
         }
 
         /* GRID DE CARDS */
-     .section-title {
+       .section-title {
             max-width: 1200px;
             margin: 0 auto 40px;
             padding: 0 40px;
         }
 
-     .section-title h2 {
+       .section-title h2 {
             font-family: 'Cinzel', serif;
             font-size: 36px;
             color: #D4AF37;
             text-align: center;
         }
 
-     .spaces-grid {
+       .spaces-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
@@ -192,7 +216,7 @@
             justify-items: center;
         }
 
-     .space-card {
+       .space-card {
             background: #2a2a2a;
             border-radius: 12px;
             overflow: hidden;
@@ -204,13 +228,13 @@
             max-width: 380px;
         }
 
-     .space-card:hover {
+       .space-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 12px 30px rgba(74, 93, 90, 0.4);
             border-color: #D4AF37;
         }
 
-     .space-card img {
+       .space-card img {
             width: 100%;
             height: 220px;
             object-fit: cover;
@@ -218,29 +242,29 @@
             transition: transform 0.3s ease;
         }
 
-     .space-card:hover img {
+       .space-card:hover img {
             transform: scale(1.05);
         }
 
-     .space-card.info {
+       .space-card.info {
             padding: 25px 20px;
         }
 
-     .space-card h3 {
+       .space-card h3 {
             font-family: 'Cinzel', serif;
             font-size: 22px;
             color: #D4AF37;
             margin-bottom: 12px;
         }
 
-     .space-card p {
+       .space-card p {
             font-size: 15px;
             line-height: 1.6;
             color: #ccc;
         }
 
         /* MODAL LIGHTBOX */
-     .modal-overlay {
+       .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -258,13 +282,13 @@
             padding: 20px;
         }
 
-     .modal-overlay.active {
+       .modal-overlay.active {
             opacity: 1;
             visibility: visible;
         }
 
-     .modal-content {
-            background: rgba(6, 7, 6, 0.16);
+       .modal-content {
+            background: rgba(6, 7, 6, 0.95);
             max-width: 600px;
             width: 90%;
             max-height: 85vh;
@@ -287,7 +311,7 @@
             }
         }
 
-     .modal-close {
+       .modal-close {
             position: absolute;
             top: 12px;
             right: 12px;
@@ -306,30 +330,30 @@
             transition: 0.3s;
         }
 
-     .modal-close:hover {
+       .modal-close:hover {
             background: #D4AF37;
             transform: rotate(90deg);
         }
 
-     .modal-img {
+       .modal-img {
             width: 100%;
             height: 280px;
             object-fit: cover;
             border-radius: 14px 14px 0 0;
         }
 
-     .modal-body {
+       .modal-body {
             padding: 30px;
         }
 
-     .modal-body h2 {
+       .modal-body h2 {
             font-family: 'Cinzel', serif;
             font-size: 26px;
             color: #D4AF37;
             margin-bottom: 15px;
         }
 
-     .modal-body h3 {
+       .modal-body h3 {
             font-family: 'Cinzel', serif;
             font-size: 18px;
             color: #D4AF37;
@@ -337,21 +361,21 @@
             margin-bottom: 10px;
         }
 
-     .modal-body p {
+       .modal-body p {
             font-size: 15px;
             line-height: 1.8;
             margin-bottom: 12px;
             color: #ccc;
         }
 
-      .modal-content::-webkit-scrollbar {
+       .modal-content::-webkit-scrollbar {
             width: 8px;
         }
-      .modal-content::-webkit-scrollbar-track {
+       .modal-content::-webkit-scrollbar-track {
             background: #2a2a2a;
             border-radius: 10px;
         }
-      .modal-content::-webkit-scrollbar-thumb {
+       .modal-content::-webkit-scrollbar-thumb {
             background: #D4AF37;
             border-radius: 10px;
         }
@@ -372,28 +396,28 @@
                 height: auto;
                 padding: 15px;
             }
-         .nav-menu {
+           .nav-menu {
                 gap: 20px;
                 flex-wrap: wrap;
                 justify-content: center;
                 margin-top: 10px;
             }
-         .intro h1 {
+           .intro h1 {
                 font-size: 36px;
             }
-         .section-title h2 {
+           .section-title h2 {
                 font-size: 28px;
             }
-         .canvas-full {
+           .canvas-full {
                 height: 400px;
             }
-         .spaces-grid {
+           .spaces-grid {
                 padding: 0 25px;
             }
-         .modal-body {
+           .modal-body {
                 padding: 25px;
             }
-         .modal-img {
+           .modal-img {
                 height: 220px;
             }
         }
@@ -422,9 +446,15 @@
             </p>
         </div>
 
-        <div class="canvas-full">
-            <canvas id="canvas3d"></canvas>
-            <a href="modelo3d.html" class="btn-360">Ver en 360°</a>
+        <!-- WRAPPER DEL MODELO CON NOTA -->
+        <div class="model-wrapper">
+            <div class="loading-note" id="loadingNote">
+                ⏳ El modelo 3D puede tardar algunos segundos en cargar debido a su tamaño y calidad. Por favor, espere un momento mientras se completa la carga.
+            </div>
+            <div class="canvas-full">
+                <canvas id="canvas3d"></canvas>
+                <a href="modelo3d.html" class="btn-360">Ver en 360°</a>
+            </div>
         </div>
 
         <div class="descripcion-edificio">
@@ -530,7 +560,6 @@
     <!-- FOOTER -->
     <footer>
         <p>Casa Nacional de Moneda | Potosí | Bolivia</p>
-        
     </footer>
 
     <!-- MODAL -->
@@ -580,11 +609,18 @@
 
         let model;
         const loader = new GLTFLoader();
+        const loadingNote = document.getElementById('loadingNote');
+
         loader.load('casamoneda.glb',
             function(gltf){
                 model = gltf.scene;
                 model.scale.set(2.5, 2.5, 2.5);
                 scene.add(model);
+                loadingNote.classList.add('hidden'); // Oculta la nota al cargar
+            },
+            undefined,
+            function(error){
+                loadingNote.innerHTML = '❌ Error al cargar el modelo 3D';
             }
         );
 
