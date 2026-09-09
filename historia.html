@@ -3,335 +3,1248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historia - Casa de la Moneda</title>
+
+    <title>Historia | Casa Nacional de Moneda</title>
+
+    <link rel="stylesheet" href="css/estilo.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;600;700&display=swap');
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* =========================================================
+           EXPERIENCIA HISTORIA
+        ========================================================= */
 
         body {
-            font-family: 'Montserrat', sans-serif;
-            background: #000;
-            color: #fff;
-            overflow-x: hidden;
+            background:
+                radial-gradient(circle at 50% 20%, rgba(111,145,136,0.10), transparent 35%),
+                #101514;
         }
 
-        nav {
-            background: rgba(74, 93, 90, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 0 50px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 80px;
+        .historia-experience {
+            position: relative;
+            min-height: 400vh;
+        }
+
+        /* =========================================================
+           CAPA FIJA DEL MODELO
+        ========================================================= */
+
+        .model-fixed-layer {
             position: fixed;
-            top: 0;
+            top: 80px;
+            left: 0;
             width: 100%;
-            z-index: 1000;
-        }
+            height: calc(100vh - 80px);
 
-        .nav-logo { display: flex; align-items: center; gap: 15px; }
-        .nav-logo img { width: 45px; height: 45px; border-radius: 50%; }
-        .nav-logo span { color: #fff; font-weight: 700; font-size: 18px; letter-spacing: 1px; }
-        .nav-menu { display: flex; list-style: none; gap: 40px; }
-        .nav-menu a {
-            color: #fff; text-decoration: none; font-weight: 500; font-size: 15px;
-            letter-spacing: 1px; text-transform: uppercase; transition: all 0.3s;
+            z-index: 5;
+            pointer-events: none;
+
+            overflow: hidden;
         }
-        .nav-menu a:hover, .nav-menu a.active { color: #D4AF37; }
 
         #canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            position: absolute;
+
+            top: 50%;
+
+            width: 58vw;
+            height: 88vh;
+
+            transform: translate(-50%, -50%);
+
             display: block;
-            z-index: 1;
+
+            background: transparent;
+
+            transition:
+                left 1.15s cubic-bezier(.22,.61,.36,1),
+                filter .8s ease;
         }
 
-        .content {
-            position: relative;
+        /* MODELO A LA DERECHA */
+
+        .model-fixed-layer.model-right #canvas {
+            left: 75%;
+        }
+
+        /* MODELO A LA IZQUIERDA */
+
+        .model-fixed-layer.model-left #canvas {
+            left: 25%;
+        }
+
+        /* =========================================================
+           BRILLO DETRÁS DEL MODELO
+        ========================================================= */
+
+        .model-glow {
+            position: absolute;
+
+            top: 50%;
+            left: 75%;
+
+            width: 380px;
+            height: 380px;
+
+            transform: translate(-50%, -50%);
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(212,175,55,0.20) 0%,
+                    rgba(111,145,136,0.12) 35%,
+                    transparent 70%
+                );
+
+            filter: blur(18px);
+
+            opacity: 0.85;
+
+            transition:
+                left 1.15s cubic-bezier(.22,.61,.36,1),
+                opacity .8s ease,
+                transform .8s ease;
+        }
+
+        .model-fixed-layer.model-left .model-glow {
+            left: 25%;
+        }
+
+        /* =========================================================
+           MENSAJE DE CARGA
+        ========================================================= */
+
+        .loading-note {
+            position: absolute;
+
+            top: 50%;
+            left: 75%;
+
+            transform: translate(-50%, -50%);
+
+            width: min(90%, 420px);
+
+            padding: 24px 28px;
+
+            text-align: center;
+
+            background: rgba(18, 30, 28, 0.90);
+
+            border: 1px solid rgba(212,175,55,0.45);
+
+            border-radius: 16px;
+
+            color: #fff;
+
+            font-size: 15px;
+            line-height: 1.6;
+
+            box-shadow:
+                0 15px 45px rgba(0,0,0,0.45),
+                0 0 30px rgba(212,175,55,0.08);
+
+            backdrop-filter: blur(12px);
+
+            transition:
+                left 1.15s cubic-bezier(.22,.61,.36,1),
+                opacity .5s ease,
+                transform .5s ease;
+
             z-index: 10;
+        }
+
+        .model-fixed-layer.model-left .loading-note {
+            left: 25%;
+        }
+
+        .loading-note.hidden {
+            opacity: 0;
+
+            pointer-events: none;
+
+            transform:
+                translate(-50%, -50%)
+                scale(.9);
+        }
+
+        /* =========================================================
+           SECCIONES DE HISTORIA
+        ========================================================= */
+
+        .story-panel {
+            min-height: 100vh;
+
+            width: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 100px 6vw 80px;
+
+            position: relative;
+
+            z-index: 20;
+
             pointer-events: none;
         }
 
-        .section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 0 10%;
+        /* TEXTO IZQUIERDA */
+
+        .story-left {
+            justify-content: flex-start;
         }
 
-        .text-box {
-            max-width: 650px;
-            background: rgba(26, 26, 26, 0.75);
-            backdrop-filter: blur(15px);
-            padding: 50px;
+        /* TEXTO DERECHA */
+
+        .story-right {
+            justify-content: flex-end;
+        }
+
+        /* =========================================================
+           TARJETA DE TEXTO
+        ========================================================= */
+
+        .story-card {
+            width: min(460px, 38vw);
+
+            min-width: 350px;
+
+            padding: 35px;
+
             border-radius: 20px;
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(42,64,60,0.94),
+                    rgba(18,28,27,0.92)
+                );
+
+            border: 1px solid rgba(212,175,55,0.28);
+
+            box-shadow:
+                0 25px 70px rgba(0,0,0,0.38),
+                inset 0 1px 0 rgba(255,255,255,0.04);
+
+            backdrop-filter: blur(14px);
+
+            opacity: .45;
+
+            transform:
+                translateY(25px)
+                scale(.97);
+
+            transition:
+                opacity .7s ease,
+                transform .7s ease,
+                border-color .7s ease,
+                box-shadow .7s ease;
+
             pointer-events: auto;
         }
-        
-        .text-box h1 {
-            font-family: 'Cinzel', serif; font-size: 48px; margin-bottom: 30px;
-            color: #D4AF37; border-left: 4px solid #4A5D5A; padding-left: 20px;
+
+        .story-panel.active .story-card {
+            opacity: 1;
+
+            transform:
+                translateY(0)
+                scale(1);
+
+            border-color: rgba(212,175,55,0.60);
+
+            box-shadow:
+                0 30px 80px rgba(0,0,0,0.50),
+                0 0 35px rgba(212,175,55,0.07);
         }
-        
-        .text-box h2 {
-            font-family: 'Cinzel', serif; font-size: 32px; margin-bottom: 20px;
+
+        /* =========================================================
+           TEXTOS
+        ========================================================= */
+
+        .story-card h1,
+        .story-card h2 {
+            color: #D4AF37;
+
+            margin-bottom: 22px;
+
+            line-height: 1.15;
+
+            font-weight: 700;
+        }
+
+        .story-card h1 {
+            font-size: clamp(28px, 3vw, 42px);
+        }
+
+        .story-card h2 {
+            font-size: clamp(25px, 2.6vw, 34px);
+        }
+
+        .story-card p {
+            color: rgba(255,255,255,0.88);
+
+            font-size: 15px;
+
+            line-height: 1.85;
+
+            margin-bottom: 18px;
+        }
+
+        .story-card strong {
             color: #D4AF37;
         }
-        
-        .text-box p {
-            font-size: 18px; line-height: 1.9; margin-bottom: 20px; color: #eee;
-        }
-        
-        .btn-historia-careta {
-            display: inline-block; margin-top: 20px; padding: 16px 40px;
-            background: #4A5D5A; color: #fff; font-family: 'Montserrat', sans-serif;
-            font-size: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;
-            border: 2px solid #D4AF37; border-radius: 4px; cursor: pointer; transition: all 0.3s ease;
-        }
-        .btn-historia-careta:hover {
-            background: #D4AF37; color: #1a1a1a; transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+
+        /* =========================================================
+           BOTÓN MANUAL
+        ========================================================= */
+
+        .manual-control {
+            position: fixed;
+
+            right: 25px;
+            bottom: 25px;
+
+            z-index: 1200;
+
+            border: 1px solid rgba(212,175,55,0.55);
+
+            background:
+                rgba(25,40,37,0.95);
+
+            color: #fff;
+
+            padding: 14px 20px;
+
+            border-radius: 12px;
+
+            font-family: 'Montserrat', sans-serif;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 10px 30px rgba(0,0,0,0.40);
+
+            transition:
+                .3s ease;
+
+            pointer-events: auto;
         }
 
-        .scroll-hint {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            z-index: 20; color: #D4AF37; font-size: 14px; text-align: center;
-            animation: bounce 2s infinite;
-        }
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-            40% { transform: translateX(-50%) translateY(-10px); }
-            60% { transform: translateX(-50%) translateY(-5px); }
+        .manual-control:hover {
+            color: #D4AF37;
+
+            border-color: #D4AF37;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 35px rgba(212,175,55,0.15);
         }
 
-        .side-panel {
-            position: fixed; right: -650px; top: 0; width: 600px; height: 100vh;
-            background: rgba(26, 26, 26, 0.95); backdrop-filter: blur(20px); z-index: 150;
-            transition: right 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-            overflow-y: auto; border-left: 4px solid #D4AF37;
+        .manual-control.active {
+            background: #D4AF37;
+
+            color: #14201e;
+
+            border-color: #D4AF37;
         }
-        .side-panel.active { right: 0; }
-        .panel-header { position: sticky; top: 0; background: #4A5D5A; padding: 30px 40px; display: flex; justify-content: space-between; border-bottom: 3px solid #D4AF37; }
-        .panel-header h2 { font-family: 'Cinzel', serif; font-size: 28px; color: #D4AF37; }
-        .panel-close { font-size: 40px; cursor: pointer; color: #fff; }
-        .panel-close:hover { transform: rotate(90deg); color: #D4AF37; }
-        .panel-body { padding: 40px 45px; }
-        .panel-body h3 { font-family: 'Cinzel', serif; font-size: 22px; color: #D4AF37; margin: 30px 0 15px; }
-        .panel-body p, .panel-body li { font-size: 16px; line-height: 1.9; margin-bottom: 18px; color: #ccc; }
-        .panel-body strong { color: #D4AF37; }
-        .panel-img { width: 100%; height: 380px; object-fit: cover; border-radius: 12px; margin: 25px 0; border: 2px solid #4A5D5A; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.7); opacity: 0; visibility: hidden; transition: 0.4s; z-index: 140; }
-        .overlay.active { opacity: 1; visibility: visible; }
-        body.panel-open { overflow: hidden; }
+
+        /* =========================================================
+           AYUDA MANIPULACIÓN
+        ========================================================= */
+
+        .manual-help {
+            position: fixed;
+
+            right: 25px;
+            bottom: 82px;
+
+            z-index: 1200;
+
+            padding: 10px 15px;
+
+            background:
+                rgba(15,22,21,0.90);
+
+            border:
+                1px solid rgba(212,175,55,0.25);
+
+            border-radius: 10px;
+
+            color:
+                rgba(255,255,255,0.75);
+
+            font-size: 11px;
+
+            opacity: 0;
+
+            transform:
+                translateY(10px);
+
+            transition:
+                .3s ease;
+
+            pointer-events: none;
+        }
+
+        .manual-help.show {
+            opacity: 1;
+
+            transform:
+                translateY(0);
+        }
+
+        /* =========================================================
+           PANEL DEL MASCARÓN
+        ========================================================= */
+
+        .misterio-panel {
+            position: fixed;
+
+            top: 80px;
+
+            right: -500px;
+
+            width: min(480px, 90vw);
+
+            height: calc(100vh - 80px);
+
+            padding: 40px;
+
+            overflow-y: auto;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(31,49,46,0.98),
+                    rgba(13,21,20,0.98)
+                );
+
+            border-left:
+                1px solid rgba(212,175,55,0.35);
+
+            box-shadow:
+                -20px 0 60px rgba(0,0,0,0.50);
+
+            backdrop-filter: blur(18px);
+
+            z-index: 1100;
+
+            transition:
+                right .6s cubic-bezier(.22,.61,.36,1);
+        }
+
+        .misterio-panel.open {
+            right: 0;
+        }
+
+        .misterio-panel h2 {
+            color: #D4AF37;
+
+            font-size: 30px;
+
+            margin-bottom: 25px;
+        }
+
+        .misterio-panel h3 {
+            color: #D4AF37;
+
+            font-size: 20px;
+
+            margin:
+                30px 0 15px;
+        }
+
+        .misterio-panel p {
+            color:
+                rgba(255,255,255,0.86);
+
+            font-size: 14px;
+
+            line-height: 1.8;
+
+            margin-bottom: 16px;
+        }
+
+        .misterio-panel img {
+            width: 100%;
+
+            border-radius: 14px;
+
+            margin-bottom: 25px;
+
+            border:
+                1px solid rgba(212,175,55,0.25);
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,0.35);
+        }
+
+        /* =========================================================
+           BOTÓN MISTERIO
+        ========================================================= */
+
+        .misterio-button {
+            margin-top: 10px;
+
+            padding: 13px 20px;
+
+            border-radius: 10px;
+
+            border:
+                1px solid rgba(212,175,55,0.55);
+
+            background:
+                rgba(212,175,55,0.08);
+
+            color: #D4AF37;
+
+            font-family: 'Montserrat', sans-serif;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: .3s ease;
+        }
+
+        .misterio-button:hover {
+            background: #D4AF37;
+
+            color: #14201e;
+        }
+
+        /* =========================================================
+           CERRAR PANEL
+        ========================================================= */
+
+        .close-misterio {
+            position: absolute;
+
+            top: 20px;
+            right: 20px;
+
+            width: 35px;
+            height: 35px;
+
+            border-radius: 50%;
+
+            border:
+                1px solid rgba(212,175,55,0.35);
+
+            background:
+                rgba(0,0,0,0.25);
+
+            color: #fff;
+
+            cursor: pointer;
+
+            font-size: 18px;
+
+            transition: .3s ease;
+        }
+
+        .close-misterio:hover {
+            color: #D4AF37;
+
+            border-color: #D4AF37;
+        }
+
+        /* =========================================================
+           FOOTER NUEVO VERDECITO IGUAL A LA IMAGEN
+        ========================================================= */
+
+        .historia-footer {
+            background: #3F5F5E; /* verde petróleo de tu imagen */
+            padding: 35px 20px;
+            position: relative;
+            z-index: 30;
+            border-top: 2px solid #D4AF37; /* lineita amarilla dorada */
+            text-align: center;
+        }
+
+        .historia-footer h3 {
+            font-family: 'Cinzel', serif;
+            color: #D4AF37; /* amarillo dorado */
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .historia-footer p {
+            font-family: 'Montserrat', sans-serif;
+            color: #E8E8E8; /* blanco gris */
+            font-size: 13px;
+            font-weight: 300;
+            letter-spacing: 1.5px;
+        }
+
+        /* =========================================================
+           MODO MANUAL
+        ========================================================= */
+
+        .model-fixed-layer.manual-active {
+            pointer-events: auto;
+        }
+
+        .model-fixed-layer.manual-active #canvas {
+            cursor: grab;
+        }
+
+        .model-fixed-layer.manual-active #canvas:active {
+            cursor: grabbing;
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
 
         @media (max-width: 900px) {
-            nav { padding: 0 20px; }
-            .nav-menu { display: none; }
-            .section { padding: 0 5%; }
-            .text-box { padding: 30px; }
-            .text-box h1 { font-size: 32px; }
-            .side-panel { width: 92%; right: -92%; }
+
+            .model-fixed-layer {
+                position: fixed;
+
+                top: 110px;
+
+                height:
+                    calc(100vh - 110px);
+            }
+
+            #canvas {
+                width: 100vw;
+                height: 65vh;
+            }
+
+            .model-fixed-layer.model-right #canvas,
+            .model-fixed-layer.model-left #canvas {
+                left: 50%;
+            }
+
+            .model-glow,
+            .model-fixed-layer.model-left .model-glow,
+            .model-fixed-layer.model-right .model-glow {
+                left: 50%;
+            }
+
+            .loading-note,
+            .model-fixed-layer.model-left .loading-note,
+            .model-fixed-layer.model-right .loading-note {
+                left: 50%;
+
+                width: 80%;
+            }
+
+            .story-panel {
+                min-height: 100vh;
+
+                padding:
+                    120px 20px 80px;
+
+                justify-content: center;
+            }
+
+            .story-card {
+                width: 90vw;
+
+                min-width: 0;
+
+                margin-top: 45vh;
+
+                background:
+                    rgba(18,28,27,0.93);
+            }
+
+            .manual-control {
+                right: 15px;
+
+                bottom: 15px;
+
+                font-size: 12px;
+
+                padding:
+                    12px 15px;
+            }
+
+            .manual-help {
+                right: 15px;
+
+                bottom: 70px;
+
+                max-width: 230px;
+
+                text-align: right;
+            }
+
+            .misterio-panel {
+                width: 100vw;
+
+                right: -100vw;
+
+                padding:
+                    35px 25px;
+            }
         }
+
     </style>
+
+    <!-- =========================================================
+         IMPORTMAP THREE.JS
+    ========================================================= -->
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
 </head>
+
 <body>
+
+    <!-- =========================================================
+         NAVBAR
+    ========================================================= -->
+
     <nav>
+
         <div class="nav-logo">
-            <img src="img/cara.png" alt="Casa de la Moneda">
-            <span>CASA NACIONAL DE MONEDA</span>
+
+            <img
+                src="img/cara.png"
+                alt="Casa de la Moneda"
+            >
+
+            <span>
+                CASA NACIONAL DE MONEDA
+            </span>
+
         </div>
-        <ul class="nav-menu">
+
+         <ul class="nav-menu">
             <li><a href="index.html">INICIO</a></li>
-            <li><a href="historia.html" class="active">HISTORIA</a></li>
+            <li><a href="historia.html">HISTORIA</a></li>
             <li><a href="infraestructura.html">INFRAESTRUCTURA</a></li>
+            <li><a href="espacios.html">ESPACIOS</a></li> <!-- NUEVO -->
             <li><a href="monedas.html">MONEDAS</a></li>
             <li><a href="informacion.html">INFORMACIÓN</a></li>
         </ul>
+
     </nav>
 
-    <canvas id="canvas"></canvas>
+    <!-- =========================================================
+         EXPERIENCIA
+    ========================================================= -->
 
-    <div class="content">
-        <section class="section">
-            <div class="text-box">
-                <h1>Historia de la Casa de la Moneda</h1>
-                <p>
-                    La historia de este imponente edificio está amarrada al <strong>Cerro Rico de Potosí</strong>, la veta de plata más grande del planeta.
-                    Durante el siglo XVI, la cantidad de mineral extraído era tan bestial que nació la famosa leyenda del puente de plata hasta España.
-                </p>
-                <p>
-                    La Corona española necesitaba controlar este flujo de riqueza, cobrar impuestos y transformar la plata bruta en dinero legal para financiar sus guerras en Europa.
-                </p>
+    <main class="historia-experience">
+
+        <!-- =====================================================
+             MODELO 3D FIJO
+        ===================================================== -->
+
+        <div
+            class="model-fixed-layer model-right"
+            id="modelLayer"
+        >
+
+            <div
+                class="model-glow"
+                id="modelGlow"
+            ></div>
+
+            <canvas
+                id="canvas"
+            ></canvas>
+
+            <div
+                class="loading-note"
+                id="loadingNote"
+            >
+
+                ⏳ Cargando modelo 3D...
+
+                <br>
+                <br>
+
+                El modelo puede tardar algunos segundos debido a su tamaño y calidad.
+
             </div>
-        </section>
-        
-        <section class="section">
-            <div class="text-box">
-                <h2>El Costo Humano del Esplendor</h2>
+
+        </div>
+
+        <!-- =====================================================
+             BOTÓN MANUAL
+        ===================================================== -->
+
+        <button
+            class="manual-control"
+            id="manualButton"
+        >
+            🖐 Manipular modelo 3D
+        </button>
+
+        <div
+            class="manual-help"
+            id="manualHelp"
+        >
+            Arrastra para rotar · rueda para zoom · clic derecho para mover
+        </div>
+
+        <!-- =====================================================
+             SECCIÓN 1
+        ===================================================== -->
+
+        <section
+            class="story-panel story-left active"
+            data-index="0"
+        >
+
+            <div class="story-card">
+
+                <h1>
+                    Historia de la Casa de la Moneda
+                </h1>
+
                 <p>
-                   La <strong>mita</strong> obligó a millones de indígenas a trabajar en condiciones extremas. 
-                   Cuando la explotación de la plata se volvió masiva, los españoles decidieron importar esclavos africanos. Pero el plan fracasó por la altura de Potosí.
+                    La historia de este imponente edificio está amarrada al Cerro Rico de Potosí, la veta de plata más grande del planeta. Durante el siglo XVI, la cantidad de mineral extraído era tan bestial que nació la famosa leyenda de que con toda la plata sacada del cerro se hubiera podido construir un puente sólido desde Potosí hasta España, y que con los huesos de los indígenas caídos en el trabajo se habría podido edificar otro de regreso.
                 </p>
+
+                <p>
+                    La Corona española necesitaba controlar este flujo de riqueza, cobrar impuestos y transformar la plata bruta en dinero legal para financiar sus guerras en Europa. Las monedas acuñadas aquí se convirtieron en la primera divisa de uso global.
+                </p>
+
             </div>
+
         </section>
 
-        <section class="section">
-            <div class="text-box">
-                <h2>Fraude y Decadencia</h2>
+        <!-- =====================================================
+             SECCIÓN 2
+        ===================================================== -->
+
+        <section
+            class="story-panel story-right"
+            data-index="1"
+        >
+
+            <div class="story-card">
+
+                <h2>
+                    El Costo Humano del Esplendor
+                </h2>
+
                 <p>
-                    La primera casa operó desde 1574 acuñando las monedas imperfectas llamadas <strong>macuquinas</strong>.
-                    A mediados del siglo XVII fue escenario del fraude económico más grande de la era colonial: mezclaron plata con cobre.
+                    La mita obligó a millones de indígenas a trabajar en condiciones extremas. Cuando la explotación de la plata se volvió masiva y los indígenas no daban abasto, los españoles decidieron importar miles de esclavos africanos. Pero el plan fracasó por razones climáticas: al llegar de zonas tropicales a los más de 4,000 metros de altura de la Villa Imperial, el frío seco y congelante les causó muertes masivas por neumonía. Los pocos sobrevivientes fueron trasladados al interior de la Casa de la Moneda para mover a la fuerza los pesados engranajes cuando los animales se cansaban.
                 </p>
-                <button class="btn-historia-careta" id="openPanel">
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+             SECCIÓN 3
+        ===================================================== -->
+
+        <section
+            class="story-panel story-left"
+            data-index="2"
+        >
+
+            <div class="story-card">
+
+                <h2>
+                    Fraude y Decadencia
+                </h2>
+
+                <p>
+                    La primera casa operó desde 1574 acuñando a golpe de martillo las monedas imperfectas llamadas macuquinas. A mediados del siglo XVII, este lugar fue escenario del fraude económico más grande de la era colonial: los alcaldes y ensayadores mezclaron secretamente la plata con cobre, haciendo que la economía mundial casi colapse. El Rey envió a un juez implacable que terminó condenando a la horca a los hombres más ricos de Potosí en los mismos patios del edificio. Finalmente, tras la independencia en 1825, la ceca siguió funcionando como fábrica de monedas nacionales hasta su cierre definitivo en 1951.
+                </p>
+
+                <button
+                    class="misterio-button"
+                    id="misterioButton"
+                >
                     El Misterio del Mascarón
                 </button>
+
             </div>
+
         </section>
-    </div>
 
-    <div class="scroll-hint">⬇ Desliza para explorar ⬇</div>
+        <!-- =====================================================
+             SECCIÓN 4
+        ===================================================== -->
 
-    <div class="overlay" id="overlay"></div>
-    <div class="side-panel" id="sidePanel">
-        <div class="panel-header">
-            <h2>El Misterio del Mascarón</h2>
-            <span class="panel-close" id="closePanel">&times;</span>
-        </div>
-        <div class="panel-body">
-            <p>Esa icónica y enigmática sonrisa que te recibe al ingresar al primer patio fue tallada alrededor de 1856 por el francés <strong>Martín Moulon</strong>.</p>
-            <img src="img/oli.jpg" alt="Mascarón" class="panel-img">
-            <h3>La Dualidad en Piedra</h3>
-            <p>La genialidad de esta obra radica en un truco óptico:</p>
-            <ul>
-                <li><strong>Lado izquierdo:</strong> Codicia e ironía del colonizador</li>
-                <li><strong>Lado derecho:</strong> Tristeza y sufrimiento de los indígenas</li>
-            </ul>
-        </div>
-    </div>
+        <section
+            class="story-panel story-right"
+            data-index="3"
+        >
 
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-            }
-        }
-    </script>
+            <div class="story-card">
+
+                <h2>
+                    Una Historia Tallada en Piedra
+                </h2>
+
+                <p>
+                    La Casa Nacional de Moneda no solo conserva la historia económica de Potosí. Sus patios, muros y esculturas también guardan testimonios de las distintas épocas que atravesó la ciudad.
+                </p>
+
+                <p>
+                    Entre todos sus elementos destaca especialmente el famoso mascarón, una pieza que se convirtió en uno de los símbolos más reconocibles del edificio.
+                </p>
+
+                <button
+                    class="misterio-button"
+                    id="misterioButton2"
+                >
+                    Descubrir el Mascarón
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+             PANEL MISTERIO
+        ===================================================== -->
+
+        <aside
+            class="misterio-panel"
+            id="misterioPanel"
+        >
+
+            <button
+                class="close-misterio"
+                id="closeMisterio"
+            >
+                ×
+            </button>
+
+            <h2>
+                El Misterio del Mascarón
+            </h2>
+
+            <img
+                src="img/oli.jpg"
+                alt="Mascarón de la Casa Nacional de Moneda"
+            >
+
+            <p>
+                Esa icónica y enigmática sonrisa que te recibe al ingresar al primer patio es el gran símbolo de Potosí. Aunque durante décadas se creyó que su autor era anónimo, las investigaciones confirmaron que fue tallada alrededor de 1856 por el francés Martín Moulon, quien trabajaba como Tallador Mayor de la ceca.
+            </p>
+
+            <h3>
+                La Dualidad en Piedra
+            </h3>
+
+            <p>
+                La genialidad de esta obra radica en un truco óptico que plasma la dualidad de la historia potosina:
+            </p>
+
+            <p>
+                <strong>
+                    Lado izquierdo:
+                </strong>
+                Si miras fijamente su lado izquierdo, notarás una ceja levantada y un pómulo arqueado que representan la codicia y la ironía del colonizador español, alegre por llevarse las riquezas.
+            </p>
+
+            <p>
+                <strong>
+                    Lado derecho:
+                </strong>
+                Si tapas ese lado y observas solo el lado derecho, la expresión cambia por completo a un rostro contrito que refleja la profunda tristeza y el sufrimiento de los indígenas sometidos al trabajo forzado.
+            </p>
+
+        </aside>
+
+    </main>
+
+    <!-- =========================================================
+         FOOTER NUEVO
+    ========================================================= -->
+
+    <footer class="historia-footer">
+
+        <h3>
+            Casa Nacional de la Moneda
+        </h3>
+
+        <p>
+            Potosí | Bolivia
+        </p>
+
+    </footer>
+
+    <!-- =========================================================
+         THREE.JS
+    ========================================================= -->
 
     <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1a1a);
-        scene.fog = new THREE.Fog(0x1a1a1a, 10, 50);
+        import * as THREE from 'three';
+
+        import {
+            GLTFLoader
+        } from 'three/addons/loaders/GLTFLoader.js';
+
+        import {
+            OrbitControls
+        } from 'three/addons/controls/OrbitControls.js';
+
+        let scene;
+        let camera;
+        let renderer;
+        let controls;
+        let model;
+        let modelGroup;
+        let particles;
+        let modelLoaded = false;
+        let manualMode = false;
+        let currentSection = 0;
+        let targetScale = 1;
+        let targetRotationY = 0;
+        let targetRotationX = 0;
+        let targetY = 0;
+        let pulse = 0;
+        let elapsed = 0;
 
         const canvas = document.getElementById('canvas');
-        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 0, 4);
+        const modelLayer = document.getElementById('modelLayer');
+        const loadingNote = document.getElementById('loadingNote');
+        const manualButton = document.getElementById('manualButton');
+        const manualHelp = document.getElementById('manualHelp');
 
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+        scene = new THREE.Scene();
+
+        camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 0.15, 4.6);
+
+        renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.15;
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        modelGroup = new THREE.Group();
+        scene.add(modelGroup);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
         scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xD4AF37, 1.5);
-        directionalLight.position.set(3, 3, 3);
-        scene.add(directionalLight);
 
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enabled = true;
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.minDistance = 1.5;
-        controls.maxDistance = 8;
+        const goldLight = new THREE.SpotLight(0xD4AF37, 10, 15, Math.PI / 5, 0.55, 1.5);
+        goldLight.position.set(3.5, 4.5, 5);
+        scene.add(goldLight);
+        scene.add(goldLight.target);
 
-        let model = null;
+        const greenLight = new THREE.PointLight(0x6F9188, 7, 12);
+        greenLight.position.set(-4, 1.5, 4);
+        scene.add(greenLight);
+
+        const backLight = new THREE.PointLight(0xD4AF37, 5, 10);
+        backLight.position.set(0, 3, -3);
+        scene.add(backLight);
+
         const loader = new GLTFLoader();
 
-        // PUNTO AL QUE MIRA LA CAMARA - AHORA ESTA AL COSTADO
-        const lookAtPoint = new THREE.Vector3(2.5, 0, 0); // X=2.5 LO MUEVE A LA DERECHA
-
-        loader.load('careta.glb', 
-            function(gltf){
-                model = gltf.scene;
-                const box = new THREE.Box3().setFromObject(model);
-                const center = box.getCenter(new THREE.Vector3());
-                model.position.sub(center);
-                model.scale.set(2.5, 2.5, 2.5);
-                
-                // AQUI CAMBIAMOS LA POSICION - LO MOVEMOS AL COSTADO DERECHO
-                model.position.x = 2.5; 
-
-                scene.add(model);
-            },
-            undefined,
-            function(error){ console.error(error); }
-        );
-
-        // ========== EFECTO DE CÁMARA CON SCROLL ==========
-        function updateCameraOnScroll() {
-            const scrollY = window.scrollY;
-            const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollProgress = scrollY / documentHeight;
-
-            if(model){
-                // LA CAMARA ORBITA ALREDEDOR DEL NUEVO PUNTO
-                const angle = scrollProgress * Math.PI * 2;
-                camera.position.x = lookAtPoint.x + Math.sin(angle) * 4; // orbita alrededor de x=2.5
-                camera.position.z = lookAtPoint.z + Math.cos(angle) * 4;
-                
-                camera.position.y = Math.sin(scrollProgress * Math.PI * 2) * 1.5;
-                
-                model.rotation.y += 0.005;
-
-                camera.lookAt(lookAtPoint); // MIRA SIEMPRE AL MASCARON
+        loader.load('careta.glb', function(gltf) {
+            model = gltf.scene;
+            modelGroup.add(model);
+            model.traverse(function(child) {
+                if (child.isMesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    if (child.material) {
+                        child.material = child.material.clone();
+                        if ('emissive' in child.material) {
+                            child.material.emissive = new THREE.Color(0x241c08);
+                            child.material.emissiveIntensity = 0.18;
+                        }
+                    }
+                }
+            });
+            const box = new THREE.Box3().setFromObject(model);
+            const size = box.getSize(new THREE.Vector3());
+            const center = box.getCenter(new THREE.Vector3());
+            model.position.sub(center);
+            const maxDimension = Math.max(size.x, size.y, size.z);
+            const desiredSize = 3.15;
+            const fitScale = desiredSize / maxDimension;
+            model.scale.setScalar(fitScale);
+            model.position.y = -0.05;
+            modelGroup.rotation.y = Math.PI;
+            targetRotationY = Math.PI + 0.10;
+            targetRotationX = 0.02;
+            modelLoaded = true;
+            loadingNote.classList.add('hidden');
+            createParticles();
+            applySectionState(0, true);
+        }, function(progress) {
+            if (progress.total > 0) {
+                const percentage = Math.round(progress.loaded / progress.total * 100);
+                loadingNote.innerHTML = `⏳ Cargando modelo 3D... <br><br> ${percentage}%`;
             }
+        }, function(error) {
+            console.error('Error cargando careta.glb:', error);
+            loadingNote.innerHTML = `❌ No se pudo cargar el modelo 3D. <br><br> Verifique que <strong>careta.glb</strong> esté en la misma carpeta que historia.html.`;
+        });
+
+        function createParticles() {
+            const geometry = new THREE.BufferGeometry();
+            const positions = [];
+            for (let i = 0; i < 180; i++) {
+                positions.push((Math.random() - 0.5) * 5, (Math.random() - 0.5) * 5, (Math.random() - 0.5) * 3);
+            }
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            const material = new THREE.PointsMaterial({ color: 0xD4AF37, size: 0.018, transparent: true, opacity: 0.55 });
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
         }
 
-        function animate(){
+        controls = new OrbitControls(camera, canvas);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.06;
+        controls.enableRotate = false;
+        controls.enableZoom = false;
+        controls.enablePan = false;
+        controls.screenSpacePanning = true;
+        controls.panSpeed = 0.8;
+        controls.rotateSpeed = 0.7;
+        controls.zoomSpeed = 0.8;
+        controls.minDistance = 3;
+        controls.maxDistance = 7;
+        controls.target.set(0, 0, 0);
+
+        const sectionStates = [
+            { side: 'right', scale: 1.00, rotY: 0.10, rotX: 0.02, y: 0 },
+            { side: 'left', scale: 1.05, rotY: -0.18, rotX: -0.02, y: 0.02 },
+            { side: 'right', scale: 1.08, rotY: 0.15, rotX: 0.02, y: -0.02 },
+            { side: 'left', scale: 1.03, rotY: -0.12, rotX: -0.02, y: 0.03 }
+        ];
+
+        function applySectionState(index, instant = false) {
+            currentSection = index;
+            const state = sectionStates[index];
+            modelLayer.classList.remove('model-left', 'model-right');
+            modelLayer.classList.add(state.side === 'left' ? 'model-left' : 'model-right');
+            targetScale = state.scale;
+            targetRotationY = Math.PI + state.rotY;
+            targetRotationX = state.rotX;
+            targetY = state.y;
+            pulse = 1;
+            if (instant && modelGroup) {
+                modelGroup.rotation.y = targetRotationY;
+                modelGroup.rotation.x = targetRotationX;
+                modelGroup.position.y = targetY;
+                modelGroup.scale.setScalar(targetScale);
+            }
+            document.querySelectorAll('.story-panel').forEach(function(panel) { panel.classList.remove('active'); });
+            const activePanel = document.querySelector(`.story-panel[data-index="${index}"]`);
+            if (activePanel) { activePanel.classList.add('active'); }
+        }
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting && !manualMode) {
+                    const index = Number(entry.target.dataset.index);
+                    applySectionState(index);
+                }
+            });
+        }, { threshold: 0.55 });
+
+        document.querySelectorAll('.story-panel').forEach(function(section) { observer.observe(section); });
+
+        manualButton.addEventListener('click', function() {
+            manualMode = !manualMode;
+            if (manualMode) {
+                controls.enableRotate = true;
+                controls.enableZoom = true;
+                controls.enablePan = true;
+                controls.screenSpacePanning = true;
+                modelLayer.classList.add('manual-active');
+                manualButton.classList.add('active');
+                manualButton.textContent = '↺ Volver al modo historia';
+                manualHelp.classList.add('show');
+            } else {
+                controls.enableRotate = false;
+                controls.enableZoom = false;
+                controls.enablePan = false;
+                modelLayer.classList.remove('manual-active');
+                manualButton.classList.remove('active');
+                manualButton.textContent = '🖐 Manipular modelo 3D';
+                manualHelp.classList.remove('show');
+                camera.position.set(0, 0.15, 4.6);
+                controls.target.set(0, 0, 0);
+                controls.update();
+                applySectionState(currentSection);
+            }
+        });
+
+        const clock = new THREE.Clock();
+        function animate() {
             requestAnimationFrame(animate);
-            updateCameraOnScroll();
+            const delta = clock.getDelta();
+            elapsed += delta;
+            if (modelLoaded && modelGroup) {
+                if (!manualMode) {
+                    modelGroup.rotation.y += 0.0018;
+                    const floatingY = targetY + Math.sin(elapsed * 1.15) * 0.018;
+                    modelGroup.position.y += (floatingY - modelGroup.position.y) * 0.05;
+                    const breathing = 1 + Math.sin(elapsed * 1.4) * 0.006;
+                    const desiredScale = targetScale * breathing * (1 + pulse * 0.08);
+                    modelGroup.scale.lerp(new THREE.Vector3(desiredScale, desiredScale, desiredScale), 0.07);
+                    modelGroup.rotation.x += (targetRotationX + Math.sin(elapsed * 0.7) * 0.008 - modelGroup.rotation.x) * 0.04;
+                    pulse *= 0.92;
+                }
+            }
+            if (particles) {
+                particles.rotation.y += 0.0008;
+                particles.rotation.x = Math.sin(elapsed * 0.2) * 0.04;
+            }
             controls.update();
             renderer.render(scene, camera);
         }
         animate();
 
-        window.addEventListener('resize', () => {
+        window.addEventListener('resize', function() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         });
 
-        // PANEL LATERAL
-        const panel = document.getElementById('sidePanel');
-        const openBtn = document.getElementById('openPanel');
-        const closeBtn = document.getElementById('closePanel');
-        const overlay = document.getElementById('overlay');
+        const misterioPanel = document.getElementById('misterioPanel');
+        const misterioButton = document.getElementById('misterioButton');
+        const misterioButton2 = document.getElementById('misterioButton2');
+        const closeMisterio = document.getElementById('closeMisterio');
 
-        openBtn.onclick = () => {
-            panel.classList.add('active');
-            overlay.classList.add('active');
-            document.body.classList.add('panel-open');
-        }
-        closeBtn.onclick = () => {
-            panel.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.classList.remove('panel-open');
-        }
-        overlay.onclick = () => {
-            panel.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.classList.remove('panel-open');
-        }
+        function openMisterio() { misterioPanel.classList.add('open'); }
+        function closeMisterioPanel() { misterioPanel.classList.remove('open'); }
+
+        misterioButton.addEventListener('click', openMisterio);
+        misterioButton2.addEventListener('click', openMisterio);
+        closeMisterio.addEventListener('click', closeMisterioPanel);
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') { closeMisterioPanel(); }
+        });
+
     </script>
+
 </body>
 </html>
