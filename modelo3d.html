@@ -1,165 +1,1361 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modelo 3D - Casa de la Moneda</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Casa Nacional de Moneda | Modelo 3D
+    </title>
+
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <link rel="stylesheet"
+          href="css/estilo.css">
+
+
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{background:#566765;overflow:hidden;font-family:'Montserrat',sans-serif;}
-        
-        #canvas3d{width:100%;height:100vh;display:block;}
-        
-        .top-bar{
-            position:absolute;
-            top:0;
-            left:0;
-            width:100%;
-            padding:20px;
-            background:linear-gradient(180deg,rgba(0,0,0,0.7) 0%,transparent 100%);
-            color:white;
-            z-index:10;
-        }
-        
-        .top-bar h1{font-size:24px;margin-bottom:5px;}
-        .top-bar a{color:#CBC1BD;text-decoration:none;font-size:14px;}
-        .top-bar a:hover{color:white;}
-        
-        .controls-hint{
-            position:absolute;
-            bottom:20px;
-            left:50%;
-            transform:translateX(-50%);
-            background:rgba(0,0,0,0.6);
-            color:white;
-            padding:12px 25px;
-            border-radius:30px;
-            font-size:14px;
-            pointer-events:none;
+
+        :root {
+
+            --dorado:
+                #D4AF37;
+
+            --verde:
+                #4A5D5A;
+
+            --negro:
+                #080A09;
+
         }
 
-        .light-menu{
-            position:absolute;
-            top:100px;
-            right:20px;
-            background:rgba(0,0,0,0.7);
-            padding:15px;
-            border-radius:10px;
-            border:1px solid #D4AF37;
-            z-index:10;
+
+        html,
+        body {
+
+            margin: 0;
+
+            padding: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            overflow: hidden;
+
+            background:
+                #080A09;
+
         }
 
-        .light-menu button{
-            display:block;width:100%;margin:5px 0;padding:8px 15px;
-            background:#4A5D5A;color:white;border:1px solid #D4AF37;
-            border-radius:5px;cursor:pointer;font-size:13px;transition:all 0.3s;
+
+        .visor {
+
+            position: relative;
+
+            width: 100%;
+
+            height: 100vh;
+
+            overflow: hidden;
+
+            background:
+
+                radial-gradient(
+
+                    ellipse at center,
+
+                    #4A5D5A 0%,
+
+                    #27322F 30%,
+
+                    #101412 65%,
+
+                    #080A09 100%
+
+                );
+
         }
 
-        .light-menu button:hover{background:#D4AF37;color:#1a1a1a;}
-        .light-menu button.active{background:#D4AF37;color:#1a1a1a;}
-    </style>
-</head>
-<body>
-    <div class="top-bar">
-        <h1>Casa Nacional de la Moneda - Modelo 3D</h1>
-        <a href="infraestructura.html">← Volver a Infraestructura</a>
-    </div>
-    
-    <canvas id="canvas3d"></canvas>
-    
-    <div class="controls-hint">
-        Arrastra para rotar • Scroll para zoom • Clic derecho para mover
-    </div>
 
-    <div class="light-menu">
-        <button id="btn-dia" class="active">Día</button>
-        <button id="btn-noche"> Noche</button>
-    </div>
+        .visor::before {
 
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            content: '';
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+
+                radial-gradient(
+
+                    ellipse at center,
+
+                    rgba(212,175,55,0.13),
+
+                    transparent 60%
+
+                );
+
+            filter:
+                blur(30px);
+
+            pointer-events: none;
+
+        }
+
+
+        #canvas-container {
+
+            position: absolute;
+
+            inset: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+        }
+
+
+        #canvas-container canvas {
+
+            display: block;
+
+            width: 100% !important;
+
+            height: 100% !important;
+
+        }
+
+
+        /* =====================================================
+           CABECERA
+        ===================================================== */
+
+        .visor-header {
+
+            position: absolute;
+
+            top: 30px;
+
+            left: 35px;
+
+            z-index: 20;
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 6px;
+
+            pointer-events: none;
+
+        }
+
+
+        .visor-header span {
+
+            color:
+                var(--dorado);
+
+            font-size: 9px;
+
+            letter-spacing: 3px;
+
+        }
+
+
+        .visor-header strong {
+
+            color: white;
+
+            font-family:
+                'Cinzel',
+                serif;
+
+            font-size: 18px;
+
+            letter-spacing: 1px;
+
+        }
+
+
+        /* =====================================================
+           VOLVER
+        ===================================================== */
+
+        .back-button {
+
+            position: absolute;
+
+            top: 30px;
+
+            right: 35px;
+
+            z-index: 30;
+
+            padding:
+                12px 18px;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            letter-spacing: 1.5px;
+
+            border:
+                1px solid
+                rgba(212,175,55,0.65);
+
+            background:
+                rgba(8,10,9,0.75);
+
+            backdrop-filter:
+                blur(10px);
+
+            transition:
+                all 0.3s ease;
+
+        }
+
+
+        .back-button:hover {
+
+            background:
+                var(--dorado);
+
+            color:
+                #111;
+
+        }
+
+
+        /* =====================================================
+           LOADING
+        ===================================================== */
+
+        #loading {
+
+            position: absolute;
+
+            top: 50%;
+
+            left: 50%;
+
+            transform:
+                translate(-50%, -50%);
+
+            z-index: 50;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            gap: 15px;
+
+            color: white;
+
+            font-size: 11px;
+
+            letter-spacing: 2px;
+
+            pointer-events: none;
+
+            transition:
+                opacity 0.5s ease;
+
+        }
+
+
+        #loading.hidden {
+
+            opacity: 0;
+
+        }
+
+
+        .loader {
+
+            width: 45px;
+
+            height: 45px;
+
+            border:
+                2px solid
+                rgba(255,255,255,0.15);
+
+            border-top:
+                2px solid
+                var(--dorado);
+
+            border-radius: 50%;
+
+            animation:
+                spin 1s linear infinite;
+
+        }
+
+
+        @keyframes spin {
+
+            to {
+
+                transform:
+                    rotate(360deg);
+
             }
-        }
-    </script>
 
-    <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x566765); // Tu color original
-
-        const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1000);
-        camera.position.set(3,2,4);
-
-        const renderer = new THREE.WebGLRenderer({
-            canvas: document.getElementById('canvas3d'),
-            antialias:true
-        });
-        renderer.setSize(window.innerWidth,window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-
-        const ambientLight = new THREE.AmbientLight(0xffffff,0.7);
-        scene.add(ambientLight);
-        
-        const directionalLight = new THREE.DirectionalLight(0xffffff,1);
-        directionalLight.position.set(5,10,5);
-        scene.add(directionalLight);
-
-        const controls = new OrbitControls(camera,renderer.domElement);
-        controls.enableDamping=true;
-        controls.dampingFactor=0.05;
-        controls.autoRotate=false;
-
-        const loader = new GLTFLoader();
-        loader.load('casamoneda.glb',function(gltf){
-            const model=gltf.scene;
-            model.scale.set(2.5,2.5,2.5);
-            scene.add(model);
-        });
-
-        function animate(){
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene,camera);
-        }
-        animate();
-
-        window.addEventListener('resize',()=>{
-            camera.aspect=window.innerWidth/window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth,window.innerHeight);
-        });
-
-        const btnDia = document.getElementById('btn-dia');
-        const btnNoche = document.getElementById('btn-noche');
-
-        btnDia.onclick = () => {
-            scene.background.setHex(0x566765); // Día: tu color original
-            ambientLight.intensity = 0.7;
-            ambientLight.color.setHex(0xffffff);
-            directionalLight.intensity = 1;
-            directionalLight.color.setHex(0xffffff);
-            setActive(btnDia);
         }
 
-        btnNoche.onclick = () => {
-            scene.background.setHex(0x2a2a2a); // Noche: gris oscuro
-            ambientLight.intensity = 0.2;
-            ambientLight.color.setHex(0x7a7a7a);
-            directionalLight.intensity = 0.4;
-            directionalLight.color.setHex(0xa0a0a0);
-            setActive(btnNoche);
+
+        /* =====================================================
+           CONTROLES
+        ===================================================== */
+
+        .visor-controls {
+
+            position: absolute;
+
+            left: 50%;
+
+            bottom: 30px;
+
+            transform:
+                translateX(-50%);
+
+            z-index: 30;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            gap: 10px;
+
         }
 
-        function setActive(btn){
-            document.querySelectorAll('.light-menu button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+
+        .visor-buttons {
+
+            display: flex;
+
+            gap: 10px;
+
         }
-    </script>
+
+
+        .visor-controls button {
+
+            padding:
+                13px 20px;
+
+            background:
+                rgba(8,10,9,0.88);
+
+            color: white;
+
+            border:
+                1px solid
+                rgba(212,175,55,0.70);
+
+            font-family:
+                'Montserrat',
+                sans-serif;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            letter-spacing: 1.5px;
+
+            cursor: pointer;
+
+            transition:
+                all 0.3s ease;
+
+            backdrop-filter:
+                blur(10px);
+
+        }
+
+
+        .visor-controls button:hover,
+        .visor-controls button.active {
+
+            background:
+                var(--dorado);
+
+            color:
+                #111;
+
+        }
+
+
+        .visor-controls p {
+
+            margin: 0;
+
+            color:
+                rgba(255,255,255,0.65);
+
+            font-size: 10px;
+
+            text-align: center;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+
+            .visor-header {
+
+                left:
+                    20px;
+
+                top:
+                    20px;
+
+            }
+
+
+            .visor-header strong {
+
+                font-size:
+                    14px;
+
+            }
+
+
+            .back-button {
+
+                right:
+                    20px;
+
+                top:
+                    20px;
+
+            }
+
+
+            .visor-controls {
+
+                bottom:
+                    20px;
+
+            }
+
+
+            .visor-buttons {
+
+                flex-direction:
+                    column;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="visor">
+
+
+    <!-- =====================================================
+         CABECERA
+    ====================================================== -->
+
+    <div class="visor-header">
+
+        <span>
+            EXPERIENCIA 3D
+        </span>
+
+        <strong>
+            CASA NACIONAL DE MONEDA
+        </strong>
+
+    </div>
+
+
+    <!-- =====================================================
+         VOLVER
+    ====================================================== -->
+
+    <a href="infraestructura.html"
+       class="back-button">
+
+        ← VOLVER
+
+    </a>
+
+
+    <!-- =====================================================
+         LOADING
+    ====================================================== -->
+
+    <div id="loading">
+
+        <div class="loader"></div>
+
+        <span>
+            Cargando modelo... 0%
+        </span>
+
+    </div>
+
+
+    <!-- =====================================================
+         MODELO
+    ====================================================== -->
+
+    <div id="canvas-container"></div>
+
+
+    <!-- =====================================================
+         CONTROLES
+    ====================================================== -->
+
+    <div class="visor-controls">
+
+        <div class="visor-buttons">
+
+            <button id="manualBtn">
+
+                🖐 MANIPULAR MODELO
+
+            </button>
+
+
+            <button id="fullscreenBtn">
+
+                ⛶ PANTALLA COMPLETA
+
+            </button>
+
+        </div>
+
+
+        <p id="help">
+
+            Activa el modo manual para explorar
+            el edificio en 360°
+
+        </p>
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================================================
+     THREE.JS
+========================================================= -->
+
+<script type="importmap">
+
+{
+    "imports": {
+
+        "three":
+        "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+
+        "three/addons/":
+        "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+
+    }
+}
+
+</script>
+
+
+<script type="module">
+
+import * as THREE from 'three';
+
+import {
+    GLTFLoader
+} from 'three/addons/loaders/GLTFLoader.js';
+
+import {
+    OrbitControls
+} from 'three/addons/controls/OrbitControls.js';
+
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const container =
+    document.getElementById(
+        'canvas-container'
+    );
+
+const loading =
+    document.getElementById(
+        'loading'
+    );
+
+const loadingText =
+    loading.querySelector(
+        'span'
+    );
+
+const manualBtn =
+    document.getElementById(
+        'manualBtn'
+    );
+
+const fullscreenBtn =
+    document.getElementById(
+        'fullscreenBtn'
+    );
+
+const help =
+    document.getElementById(
+        'help'
+    );
+
+
+/* =========================================================
+   ESCENA
+========================================================= */
+
+const scene =
+    new THREE.Scene();
+
+
+/* =========================================================
+   CÁMARA
+========================================================= */
+
+const camera =
+    new THREE.PerspectiveCamera(
+
+        35,
+
+        container.clientWidth /
+        container.clientHeight,
+
+        0.1,
+
+        3000
+
+    );
+
+
+camera.position.set(
+
+    9,
+    5,
+    12
+
+);
+
+
+/* =========================================================
+   RENDERER
+========================================================= */
+
+const renderer =
+    new THREE.WebGLRenderer({
+
+        antialias: true,
+
+        alpha: true
+
+    });
+
+
+renderer.setPixelRatio(
+
+    Math.min(
+        window.devicePixelRatio,
+        2
+    )
+
+);
+
+
+renderer.setSize(
+
+    container.clientWidth,
+
+    container.clientHeight
+
+);
+
+
+renderer.outputColorSpace =
+    THREE.SRGBColorSpace;
+
+
+renderer.shadowMap.enabled =
+    true;
+
+
+renderer.shadowMap.type =
+    THREE.PCFSoftShadowMap;
+
+
+container.appendChild(
+    renderer.domElement
+);
+
+
+/* =========================================================
+   LUCES
+========================================================= */
+
+const ambient =
+    new THREE.HemisphereLight(
+
+        0xffffff,
+
+        0x18201d,
+
+        2.8
+
+    );
+
+scene.add(
+    ambient
+);
+
+
+const mainLight =
+    new THREE.DirectionalLight(
+
+        0xfff5dc,
+
+        4.5
+
+    );
+
+
+mainLight.position.set(
+
+    8,
+    14,
+    12
+
+);
+
+
+mainLight.castShadow =
+    true;
+
+
+scene.add(
+    mainLight
+);
+
+
+const goldLight =
+    new THREE.DirectionalLight(
+
+        0xd4af37,
+
+        2.8
+
+    );
+
+
+goldLight.position.set(
+
+    -10,
+    8,
+    -8
+
+);
+
+
+scene.add(
+    goldLight
+);
+
+
+const frontLight =
+    new THREE.PointLight(
+
+        0xffffff,
+
+        2.5,
+
+        80
+
+    );
+
+
+frontLight.position.set(
+
+    0,
+    6,
+    15
+
+);
+
+
+scene.add(
+    frontLight
+);
+
+
+/* =========================================================
+   GRUPO
+========================================================= */
+
+const modelGroup =
+    new THREE.Group();
+
+
+scene.add(
+    modelGroup
+);
+
+
+let model = null;
+
+
+/* =========================================================
+   CARGADOR
+========================================================= */
+
+const loader =
+    new GLTFLoader();
+
+
+loader.load(
+
+    'casamoneda.glb',
+
+
+    function(gltf) {
+
+
+        model =
+            gltf.scene;
+
+
+        modelGroup.add(
+            model
+        );
+
+
+        model.traverse(
+
+            function(object) {
+
+                if (
+                    object.isMesh
+                ) {
+
+                    object.castShadow =
+                        true;
+
+                    object.receiveShadow =
+                        true;
+
+                }
+
+            }
+
+        );
+
+
+        /* =================================================
+           CENTRAR
+        ================================================== */
+
+        const box =
+            new THREE.Box3()
+            .setFromObject(
+                model
+            );
+
+
+        const size =
+            box.getSize(
+                new THREE.Vector3()
+            );
+
+
+        const center =
+            box.getCenter(
+                new THREE.Vector3()
+            );
+
+
+        model.position.x -=
+            center.x;
+
+
+        model.position.y -=
+            center.y;
+
+
+        model.position.z -=
+            center.z;
+
+
+        /* =================================================
+           ESCALA
+        ================================================== */
+
+        const maxDimension =
+            Math.max(
+
+                size.x,
+                size.y,
+                size.z
+
+            );
+
+
+        const targetSize =
+            9;
+
+
+        model.scale.setScalar(
+
+            targetSize /
+            maxDimension
+
+        );
+
+
+        /* =================================================
+           ORIENTACIÓN
+        ================================================== */
+
+        modelGroup.rotation.y =
+            Math.PI;
+
+
+        /* =================================================
+           ENTRADA
+        ================================================== */
+
+        modelGroup.scale.setScalar(
+            0.01
+        );
+
+
+        animateEntrance();
+
+
+        setTimeout(
+
+            function() {
+
+                loading.classList.add(
+                    'hidden'
+                );
+
+            },
+
+            500
+
+        );
+
+    },
+
+
+    function(xhr) {
+
+        if (
+            xhr.total
+        ) {
+
+            const percent =
+
+                (
+                    xhr.loaded /
+                    xhr.total
+                ) * 100;
+
+
+            loadingText.textContent =
+
+                `Cargando modelo... ${Math.round(percent)}%`;
+
+        }
+
+    },
+
+
+    function(error) {
+
+        console.error(
+            error
+        );
+
+        loadingText.textContent =
+            'No se pudo cargar el modelo 3D';
+
+    }
+
+);
+
+
+/* =========================================================
+   ENTRADA
+========================================================= */
+
+function animateEntrance() {
+
+    let progress = 0;
+
+
+    function enter() {
+
+        progress +=
+            0.025;
+
+
+        const eased =
+
+            1 -
+            Math.pow(
+
+                1 - progress,
+
+                3
+
+            );
+
+
+        modelGroup.scale.setScalar(
+            eased
+        );
+
+
+        if (
+            progress < 1
+        ) {
+
+            requestAnimationFrame(
+                enter
+            );
+
+        }
+
+    }
+
+
+    enter();
+
+}
+
+
+/* =========================================================
+   CONTROLES
+========================================================= */
+
+const controls =
+    new OrbitControls(
+
+        camera,
+
+        renderer.domElement
+
+    );
+
+
+controls.enableDamping =
+    true;
+
+
+controls.dampingFactor =
+    0.05;
+
+
+controls.enableRotate =
+    true;
+
+
+controls.enableZoom =
+    true;
+
+
+controls.enablePan =
+    true;
+
+
+controls.screenSpacePanning =
+    true;
+
+
+controls.minDistance =
+    3;
+
+
+controls.maxDistance =
+    35;
+
+
+controls.enabled =
+    false;
+
+
+/* =========================================================
+   MANUAL
+========================================================= */
+
+manualBtn.addEventListener(
+
+    'click',
+
+    function() {
+
+
+        controls.enabled =
+            !controls.enabled;
+
+
+        if (
+            controls.enabled
+        ) {
+
+            manualBtn.classList.add(
+                'active'
+            );
+
+
+            manualBtn.innerHTML =
+                '✕ SALIR DEL MODO MANUAL';
+
+
+            help.textContent =
+
+                'Arrastra para girar · rueda para acercar/alejar · clic derecho para mover';
+
+        }
+
+        else {
+
+            manualBtn.classList.remove(
+                'active'
+            );
+
+
+            manualBtn.innerHTML =
+                '🖐 MANIPULAR MODELO';
+
+
+            help.textContent =
+
+                'Activa el modo manual para explorar el edificio en 360°';
+
+        }
+
+    }
+
+);
+
+
+/* =========================================================
+   PANTALLA COMPLETA
+========================================================= */
+
+fullscreenBtn.addEventListener(
+
+    'click',
+
+    async function() {
+
+        try {
+
+            if (
+                !document.fullscreenElement
+            ) {
+
+                await document.documentElement
+                    .requestFullscreen();
+
+                fullscreenBtn.innerHTML =
+                    '✕ SALIR DE PANTALLA COMPLETA';
+
+            }
+
+            else {
+
+                await document.exitFullscreen();
+
+                fullscreenBtn.innerHTML =
+                    '⛶ PANTALLA COMPLETA';
+
+            }
+
+        }
+
+        catch(error) {
+
+            console.error(
+                error
+            );
+
+        }
+
+    }
+
+);
+
+
+/* =========================================================
+   FULLSCREEN CHANGE
+========================================================= */
+
+document.addEventListener(
+
+    'fullscreenchange',
+
+    function() {
+
+        if (
+            !document.fullscreenElement
+        ) {
+
+            fullscreenBtn.innerHTML =
+                '⛶ PANTALLA COMPLETA';
+
+        }
+
+    }
+
+);
+
+
+/* =========================================================
+   ANIMACIÓN
+========================================================= */
+
+const clock =
+    new THREE.Clock();
+
+
+function animate() {
+
+
+    requestAnimationFrame(
+        animate
+    );
+
+
+    const time =
+        clock.getElapsedTime();
+
+
+    /* giro automático */
+
+    if (
+
+        model &&
+        !controls.enabled
+
+    ) {
+
+        modelGroup.rotation.y +=
+            0.0015;
+
+
+        modelGroup.position.y =
+
+            Math.sin(
+                time * 0.7
+            ) * 0.05;
+
+    }
+
+
+    controls.update();
+
+
+    renderer.render(
+
+        scene,
+
+        camera
+
+    );
+
+}
+
+
+animate();
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+window.addEventListener(
+
+    'resize',
+
+    function() {
+
+        const width =
+            container.clientWidth;
+
+        const height =
+            container.clientHeight;
+
+
+        camera.aspect =
+            width / height;
+
+
+        camera.updateProjectionMatrix();
+
+
+        renderer.setSize(
+
+            width,
+
+            height
+
+        );
+
+    }
+
+);
+
+</script>
+
+
 </body>
+
 </html>

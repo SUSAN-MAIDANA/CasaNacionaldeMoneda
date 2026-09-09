@@ -1,36 +1,79 @@
+/* =========================================================
+   RESET GENERAL
+========================================================= */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Montserrat', sans-serif;
-    background: #101514;
-    color: #E8E8E8;
-    padding-top: 80px;
+    background: #1a1a1a;
+    color: #fff;
     overflow-x: hidden;
 }
 
-h1, h2, h3, h4 {
-    font-family: 'Cinzel', serif;
+
+/* =========================================================
+   VARIABLES GENERALES
+========================================================= */
+
+:root {
+    --dorado: #D4AF37;
+    --dorado-claro: #F1D77A;
+
+    /* COLOR ÚNICO DEL MENÚ */
+    --menu-color: #4A5D5A;
+    --menu-color-hover: #536D69;
+
+    --verde-oscuro: #1A211F;
+    --negro: #0B0E0D;
 }
 
-/* ========== MENU CON TUS COLORES VERDE Y DORADO ========== */
+
+/* =========================================================
+   NAVBAR ÚNICO PARA TODAS LAS PÁGINAS
+========================================================= */
+
 nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+    background: rgba(74, 93, 90, 0.97);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
     height: 80px;
-    background: linear-gradient(180deg, #27322F 0%, #1a211f 100%); /* VERDE OSCURO COMO TU HERO */
-    border-bottom: 2px solid #D4AF37; /* LINEA DORADA */
+
+    padding: 0 50px;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 60px;
-    z-index: 10000;
+
+    position: sticky;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+
+    z-index: 9999;
+
+    box-shadow:
+        0 2px 15px rgba(0, 0, 0, 0.35);
+
+    border-bottom:
+        1px solid rgba(212, 175, 55, 0.12);
 }
+
+
+/* =========================================================
+   LOGO
+========================================================= */
 
 .nav-logo {
     display: flex;
@@ -39,104 +82,258 @@ nav {
 }
 
 .nav-logo img {
-    height: 55px;
-    width: auto;
+    width: 45px;
+    height: 45px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
 }
 
 .nav-logo span {
-    font-family: 'Cinzel', serif;
-    color: #D4AF37; /* DORADO */
-    font-size: 16px;
+    color: #ffffff;
+
+    font-size: 18px;
     font-weight: 700;
-    letter-spacing: 1.5px;
+
+    letter-spacing: 1px;
 }
+
+
+/* =========================================================
+   MENÚ
+========================================================= */
 
 .nav-menu {
-    display: flex;
     list-style: none;
-    gap: 35px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 40px;
 }
 
-.nav-menu li a {
-    font-family: 'Montserrat', sans-serif;
-    color: #E8E8E8; /* BLANCO HUESO */
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    transition: 0.3s;
-    padding: 8px 0;
+.nav-menu li {
+    list-style: none;
+}
+
+.nav-menu a {
     position: relative;
+
+    display: inline-block;
+
+    padding-bottom: 6px;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    letter-spacing: 1px;
+
     text-transform: uppercase;
+
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
 }
 
-.nav-menu li a:hover {
-    color: #D4AF37; /* DORADO AL PASAR */
-}
 
-.nav-menu li a.active {
-    color: #D4AF37; /* DORADO ACTIVO */
-}
+/* =========================================================
+   LÍNEA DORADA
+========================================================= */
 
-.nav-menu li a.active::after {
-    content: '';
+.nav-menu a::after {
+    content: "";
+
     position: absolute;
-    bottom: 0;
+
     left: 0;
-    width: 100%;
+    bottom: 0;
+
+    width: 0;
     height: 2px;
-    background: #D4AF37; /* LINEITA DORADA */
+
+    background: var(--dorado);
+
+    transition:
+        width 0.3s ease;
 }
 
-/* ========== FOOTER VERDECITO ========== */
+
+/* =========================================================
+   HOVER / ACTIVO
+========================================================= */
+
+.nav-menu a:hover,
+.nav-menu a.active {
+    color: var(--dorado);
+}
+
+.nav-menu a:hover::after,
+.nav-menu a.active::after {
+    width: 100%;
+}
+
+
+/* =========================================================
+   RESPONSIVE NAVBAR
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    nav {
+        padding: 0 25px;
+    }
+
+    .nav-menu {
+        gap: 22px;
+    }
+
+    .nav-menu a {
+        font-size: 12px;
+    }
+
+    .nav-logo span {
+        font-size: 14px;
+    }
+}
+
+
+@media (max-width: 800px) {
+
+    nav {
+        height: auto;
+
+        min-height: 80px;
+
+        padding: 15px 20px;
+
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+    .nav-menu {
+        flex-wrap: wrap;
+
+        justify-content: center;
+
+        gap: 15px 22px;
+    }
+}
+
+
+@media (max-width: 500px) {
+
+    .nav-logo span {
+        font-size: 12px;
+    }
+
+    .nav-logo img {
+        width: 38px;
+        height: 38px;
+    }
+
+    .nav-menu {
+        gap: 12px 16px;
+    }
+
+    .nav-menu a {
+        font-size: 10px;
+    }
+}
+
+
+/* =========================================================
+   FOOTER GENERAL
+   Lo utilizaremos también en las demás páginas
+========================================================= */
+
 .site-footer {
-    background: #3F5F5E; /* VERDE PETROLEO QUE TE GUSTO */
+    background: #3F5F5E;
+
     padding: 35px 20px;
+
     text-align: center;
-    border-top: 2px solid #D4AF37;
-    margin-top: 80px;
+
+    border-top:
+        2px solid var(--dorado);
 }
 
 .footer-title {
     font-family: 'Cinzel', serif;
-    color: #D4AF37;
+
+    color: var(--dorado);
+
     font-size: 18px;
     font-weight: 600;
-    margin-bottom: 8px;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 6px;
 }
 
 .footer-location {
     color: #E8E8E8;
+
     font-size: 13px;
+    font-weight: 300;
+
+    letter-spacing: 1.5px;
+}
+
+.footer-line {
+    width: 60px;
+    height: 1px;
+
+    background:
+        rgba(212,175,55,0.3);
+
+    margin: 20px auto;
+}
+
+.footer-copy {
+    color:
+        rgba(232,232,232,0.6);
+
+    font-size: 11px;
+
     letter-spacing: 1px;
+
+    margin-bottom: 15px;
 }
 
-/* ========== ARREGLO PARA QUE NO SE BAJE ESPACIOS ========== */
-@media (max-width: 1100px) {
-    nav {
-        padding: 0 30px;
-    }
-    .nav-menu {
-        gap: 20px;
-    }
-    .nav-menu li a {
-        font-size: 12px;
-    }
+.footer-top {
+    display: inline-block;
+
+    color: var(--dorado);
+
+    font-size: 10px;
+    font-weight: 600;
+
+    letter-spacing: 2px;
+
+    text-decoration: none;
+
+    border:
+        1px solid rgba(212,175,55,0.4);
+
+    padding: 8px 16px;
+
+    border-radius: 20px;
+
+    transition:
+        all 0.3s ease;
 }
 
-@media (max-width: 850px) {
-    nav {
-        flex-direction: column;
-        height: auto;
-        padding: 15px 20px;
-    }
-    body {
-        padding-top: 130px; /* mas espacio porque el menu crece */
-    }
-    .nav-menu {
-        gap: 12px 25px;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-top: 10px;
-    }
+.footer-top:hover {
+    background: var(--dorado);
+
+    color: #111;
+
+    transform:
+        translateY(-2px);
 }
